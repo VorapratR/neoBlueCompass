@@ -1,5 +1,7 @@
 {
   "name": "neoBlueCompass",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
