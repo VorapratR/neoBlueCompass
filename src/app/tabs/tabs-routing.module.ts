@@ -8,45 +8,45 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'feeds',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+              import('../page/feeds/feeds.module').then(m => m.FeedsPageModule)
           }
         ]
       },
       {
-        path: 'tab2',
+        path: 'history',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../page/history/history.module').then(m => m.HistoryPageModule)
           }
         ]
       },
       {
-        path: 'tab3',
+        path: 'contact',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+              import('../page/contact/contact.module').then(m => m.ContactPageModule)
           }
         ]
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '../page/feeds',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/feeds',
     pathMatch: 'full'
   }
 ];
