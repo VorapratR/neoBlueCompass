@@ -1,9 +1,33 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>intro</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content fullscreen>
+  <div>
+    <h1 class="ion-padding-top ion-text-center">
+      BLUE C0MPASS
+    </h1>
+  </div>
+  <div class="ion-padding">
+    <ion-slides (ionSlideReachEnd)="endSlide()" class="img" pager="true">
+      <ion-slide>
+        <img src="../../../assets/cover1.jpg" alt="" />
+      </ion-slide>
 
-<ion-content>
+      <ion-slide>
+        <img src="../../../assets/cover2.jpg" alt="" />
+      </ion-slide>
 
+      <ion-slide>
+        <img src="../../../assets/cover3.jpg" alt="" />
+      </ion-slide>
+
+      <ion-slide>
+        <img src="../../../assets/cover4.jpg" alt="" />
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <div class="ion-padding">
+    <ion-button *ngIf="showButton" expand="block" shape="round" (click)="goToMainPage()">
+      <ion-text class="ion-padding">
+      Welcome to Application
+      </ion-text>
+    </ion-button>
+  </div>
 </ion-content>

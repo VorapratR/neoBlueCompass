@@ -5,5 +5,15 @@
 </ion-header>
 
 <ion-content>
+  <ion-searchbar shape="round" color="light" animated="true" mode="ios" (ionChange)="inputSearch($event)">
+  </ion-searchbar>
+  <ion-list>
+    <ion-list-header>
+      สถานที่ทั้งหมด
+    </ion-list-header>
+    <div *ngFor="let location of locations">
+      <app-location [location]="location"></app-location>
+    </div>    
 
+  </ion-list>
 </ion-content>
