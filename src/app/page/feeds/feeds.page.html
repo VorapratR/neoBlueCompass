@@ -9,9 +9,9 @@
   </ion-searchbar>
   <ion-list>
     <ion-list-header>
-      สถานที่ทั้งหมด
+      {{textStatus}}
     </ion-list-header>
-    <div *ngFor="let location of locations">
+    <div *ngFor="let location of filterLocations">
       <app-location [location]="location"></app-location>
     </div>    
 
