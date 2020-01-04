@@ -1,6 +1,6 @@
 <ion-header translucent>
   <ion-toolbar color="primary">
-    <ion-icon name="arrow-dropleft-circle" size="large" slot="start" routerLink="/app/tabs/feeds"></ion-icon>
+    <ion-icon name="arrow-dropleft-circle" size="large" slot="start" (click)="backBeforePage()"></ion-icon>
     <ion-title text-center>
       แผนการเดินทาง
     </ion-title>
@@ -63,19 +63,5 @@
     <ion-button  routerLink="/map" 
     size="large" > เริ่มเดินทาง ! </ion-button>
   </div>
-  
-
-  <div text-center style="margin-right: auto;margin-left: auto;margin-bottom: 2%;">
-    <ion-chip color="warning">
-      <ion-label>1</ion-label>
-    </ion-chip>
-    <ion-chip>
-      <ion-label>2</ion-label>
-    </ion-chip>
-    <ion-chip>
-      <ion-label>3</ion-label>
-    </ion-chip>
-  </div>
-
 
 </ion-content>

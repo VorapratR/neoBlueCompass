@@ -6,14 +6,16 @@ import { IonicModule } from '@ionic/angular';
 
 import { MapPageRoutingModule } from './map-routing.module';
 
-import { MapPage } from './map.page';
+import { MapPage } from './map.page'
+import { PinchZoomModule } from 'ngx-pinch-zoom';;
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MapPageRoutingModule
+    MapPageRoutingModule,
+    PinchZoomModule
   ],
   declarations: [MapPage]
 })

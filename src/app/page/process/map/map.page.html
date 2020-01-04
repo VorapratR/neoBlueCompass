@@ -1,9 +1,45 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>map</ion-title>
+<ion-header translucent>
+  <ion-toolbar color="primary">
+    <div>
+      <ion-row>
+        <ion-col size="2">
+          <img style="width: 30px;margin-left: 3%;margin-right: 5%;margin-top: 35%;"
+            src="../../../../assets/icon/down-arrow (1).svg" />
+        </ion-col>
+        <ion-col>
+          <h2>มุ่งหน้าไป</h2>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <ion-fab-button size="small" color="light" slot="end" class="item-avatar">
+      <img src="../../../../assets/icon/augmented-reality.svg" />
+    </ion-fab-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <pinch-zoom>
+    <img src="https://cdn.shortpixel.ai/client/to_webp,q_glossy,ret_img,w_1000/https://www.beartai.com/wp-content/uploads/2019/12/rise-of-skywalker-cover.jpg" />
+  </pinch-zoom>
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab-button size="small" style="margin-bottom:20%">
+      <ion-icon name="volume-high"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+
+<ion-toolbar color="primary">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <h3>จุดหมาย</h3>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button (click)="backBeforePage()" color="danger" shape="round">
+          <b>ออก</b>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-toolbar>
