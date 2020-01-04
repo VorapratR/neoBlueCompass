@@ -12,6 +12,7 @@ export class FeedsPage implements OnInit {
   lastPage  = false;
   textStatus = 'สถานที่ทั้งหมด';
   searchInput = '';
+  typeShowData = true;
   constructor(private psuHospitalService: PsuHospitalService) {
     this.psuHospitalService.loadLocation(0).subscribe(
       results => {
@@ -37,6 +38,10 @@ export class FeedsPage implements OnInit {
     this.filterLocations = this.allLocations.filter((item) => {
       return item.name.toLowerCase().indexOf(this.searchInput.toLowerCase()) > -1;
     });
+  }
+
+  setTypeShowData() {
+    this.typeShowData = !this.typeShowData;
   }
 
 }

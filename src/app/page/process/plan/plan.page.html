@@ -13,8 +13,8 @@
       จุดหมายของฉัน
     </h4>
   </ion-item>
-  <ion-card color="primary">
-    <ion-item shape="round" color="light">
+  <ion-card>
+    <ion-item color="indigo" shape="round" >
       <ion-avatar slot="start">
         <img src="../../../../assets/compass.svg">
       </ion-avatar>
@@ -29,27 +29,27 @@
       ตำแหน่งปัจจุบันของฉัน
     </h4>
   </ion-item>
-  <ion-card>
+  <ion-card color="indigo" *ngIf="statusFindMyLocation">
     <ion-card-header>
-      <h5><b>รูปแบบการระบุตำแหน่ง</b></h5>
+      <h4><b>รูปแบบการระบุตำแหน่ง</b></h4>
       <div text-center style="margin-right: auto;margin-left: auto;">
-        <ion-button>
-          <ion-icon name="camera"></ion-icon>QR Code
+        <ion-button (click)="onQrCode()">
+          <ion-icon name="camera" ></ion-icon>QR Code
         </ion-button>
-        <ion-button>
-          <ion-icon name="bluetooth"></ion-icon>Beacon
+        <ion-button (click)="onBeacon()">
+          <ion-icon name="bluetooth" ></ion-icon>Beacon
         </ion-button>
       </div>
     </ion-card-header>
-    <ion-card-content>
-      เป็นการระบุตำแหน่งโดยการสแกน Qr Code บริเวณที่คุณอยู่
+    <ion-card-content *ngIf="showDetail" >
+      {{findLocationDetail}}
     </ion-card-content>
-    <div style="margin-right: auto;margin-left: auto;margin-bottom: 2%;" text-center>
-      <ion-button shape="round" fill="outline" color="success">ฉันพร้อมจะระบุตำแหน่งแล้ว</ion-button>
+    <div *ngIf="showDetail" style="margin-right: auto;margin-left: auto;margin-bottom: 2%;" text-center>
+      <ion-button shape="round" fill="outline" color="light" (click)="onStart()">ฉันพร้อมจะระบุตำแหน่งแล้ว</ion-button>
     </div>
   </ion-card>
-  <ion-card color="primary">
-    <ion-item shape="round" color="light">
+  <ion-card *ngIf="!statusFindMyLocation" >
+    <ion-item shape="round" color="indigo">
       <ion-avatar slot="start">
         <img src="../../../../assets/compass.svg">
       </ion-avatar>
@@ -59,7 +59,7 @@
     </ion-item>
   </ion-card>
  
-  <div style="margin-left: auto;margin-right: auto;text-align:center">
+  <div *ngIf="!statusFindMyLocation" style="margin-left: auto;margin-right: auto;text-align:center">
     <ion-button  routerLink="/map" 
     size="large" > เริ่มเดินทาง ! </ion-button>
   </div>

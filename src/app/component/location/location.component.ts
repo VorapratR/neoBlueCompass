@@ -9,6 +9,7 @@ import { Location } from '../../model/location';
 export class LocationComponent implements OnInit {
   @Input() location: Location;
   @Input() index: number;
+  @Input() typeShowData: boolean;
   constructor() { }
 
   ngOnInit() {

@@ -1,9 +1,38 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>contact</ion-title>
+  <ion-toolbar color='primary'>
+    <h3 text-center>ติดต่อ</h3>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
+  <ion-grid>
+    <ion-item style="margin-block-end: 2%;" shape="round" color="primary">
+      <ion-avatar slot="start">
+        <img src="../../../../assets/compass.svg">
+      </ion-avatar>
+      <ion-label>
+        <h1><b>ผศ.ดร.แสงสุรีย์ วสุพงศ์อัยยะ </b></h1>
+      </ion-label>
+    </ion-item>
+    <ion-item style="margin-block-end: 2%;" shape="round" color="primary">
+      <ion-avatar slot="start">
+        <img src="../../../../assets/compass.svg">
+      </ion-avatar>
+      <ion-label>
+        <h1><b>นายจาคี อินทปัญญา </b></h1>
+      </ion-label>
+    </ion-item>
+    <ion-item style="margin-block-end: 5%;" shape="round" color="primary">
+      <ion-avatar slot="start">
+        <img src="../../../../assets/compass.svg">
+      </ion-avatar>
+      <ion-label>
+        <h1><b>นายวรปรัชญ์ รัตนะ </b></h1>
+      </ion-label>
+    </ion-item>
+  </ion-grid>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button color="secondary" [routerLink]="['/app/tabs/feeds']">
+      <ion-icon name="Home"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

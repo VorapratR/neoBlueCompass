@@ -6,8 +6,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { MapPageRoutingModule } from './map-routing.module';
 
-import { MapPage } from './map.page'
-import { PinchZoomModule } from 'ngx-pinch-zoom';;
+import { MapPage } from './map.page';
+import { PinchZoomModule } from 'ngx-pinch-zoom';
 
 @NgModule({
   imports: [
