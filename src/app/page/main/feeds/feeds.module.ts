@@ -13,7 +13,7 @@ import { LocationComponent } from 'src/app/component/location/location.component
     CommonModule,
     FormsModule,
     IonicModule,
-    FeedsPageRoutingModule
+    FeedsPageRoutingModule,
   ],
   declarations: [FeedsPage, LocationComponent]
 })

@@ -1,11 +1,27 @@
-<ion-grid>
-  <ion-item shape="round" color="secondary">
-    <ion-avatar slot="start">
-      <img src="../../../assets/icon/favicon.png">
-    </ion-avatar>
-    <ion-label>
-      <h1><b>{{location.name ||'ไม่มีพบข้อมูล'}}</b></h1>
-      <h2>ตึก:{{location.building || 'ไม่พบข้อมูล'}} ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</h2>
-    </ion-label>
-  </ion-item>
-</ion-grid>
+<!-- <ion-grid>
+    <ion-item *ngIf="index % 2 != 0" shape="round" color="indigo">
+      <ion-avatar slot="start">
+        <img src="../../../assets/icon/favicon.png">
+      </ion-avatar>
+      <ion-label>
+        <h1><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
+        <h2>ตึก:{{location.building || 'ไม่พบข้อมูล'}} ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="index % 2 == 0" shape="round" color="primary">
+      <ion-avatar slot="start">
+        <img src="../../../assets/icon/favicon.png">
+      </ion-avatar>
+      <ion-label>
+        <h1><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
+        <h2>ตึก:{{location.building || 'ไม่พบข้อมูล'}} ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</h2>
+      </ion-label>
+    </ion-item>
+</ion-grid> -->
+
+<ion-card color="primary">
+  <img src="../../../assets/compass.svg" style="margin-left: auto;margin-right: auto;display: block;width: 50%;margin-top: 7%;"/>
+  <ion-card-header>
+    <ion-card-subtitle text-center>{{location.name ||'ไม่มีพบข้อมูล'}}</ion-card-subtitle>
+  </ion-card-header>
+</ion-card>

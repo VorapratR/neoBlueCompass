@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar color='primary'>
+    <h3 text-center>BLUE C0MPASS</h3>
+    <ion-searchbar color="light" showCancelButton="focus" shape="round" animated="true" mode="ios"
+      (ionChange)="inputSearch($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <h4>
+        {{textStatus}}
+      </h4>
+    </ion-item>
+
+    <!-- list type 
+      <div *ngFor="let location of filterLocations; let i = index">
+      <app-location *ngIf="location" [location]="location" [index]="i"></app-location>
+    </div>     -->
+
+    <!-- card type -->
+
+    <ion-row>
+      <ion-col *ngFor="let location of filterLocations; let i = index">
+        <app-location *ngIf="location" [location]="location" [index]="i"></app-location>
+      </ion-col>
+    </ion-row>
+
+
+  </ion-list>
+</ion-content>

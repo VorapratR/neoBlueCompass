@@ -13,7 +13,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../page/feeds/feeds.module').then(m => m.FeedsPageModule)
+              import('../page/main/feeds/feeds.module').then(m => m.FeedsPageModule)
           }
         ]
       },
@@ -23,7 +23,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../page/history/history.module').then(m => m.HistoryPageModule)
+              import('../page/main/history/history.module').then(m => m.HistoryPageModule)
           }
         ]
       },
@@ -33,7 +33,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../page/contact/contact.module').then(m => m.ContactPageModule)
+              import('../page/main/contact/contact.module').then(m => m.ContactPageModule)
           }
         ]
       },

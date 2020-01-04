@@ -8,19 +8,23 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () => import('./page/intro/intro.module').then( m => m.IntroPageModule)
+    loadChildren: () => import('./page/main/intro/intro.module').then( m => m.IntroPageModule)
   },
   {
     path: 'feeds',
-    loadChildren: () => import('./page/feeds/feeds.module').then( m => m.FeedsPageModule)
+    loadChildren: () => import('./page/main/feeds/feeds.module').then( m => m.FeedsPageModule)
   },
   {
     path: 'history',
-    loadChildren: () => import('./page/history/history.module').then( m => m.HistoryPageModule)
+    loadChildren: () => import('./page/main/history/history.module').then( m => m.HistoryPageModule)
   },
   {
     path: 'contact',
-    loadChildren: () => import('./page/contact/contact.module').then( m => m.ContactPageModule)
+    loadChildren: () => import('./page/main/contact/contact.module').then( m => m.ContactPageModule)
+  },
+  {
+    path: 'plan',
+    loadChildren: () => import('./page/process/plan/plan.module').then( m => m.PlanPageModule)
   }
 ];
 @NgModule({

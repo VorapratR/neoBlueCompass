@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '../../model/location';
-import { PsuHospitalService } from './../../services/psu-hospital.service';
+import { Location } from '../../../model/location';
+import { PsuHospitalService } from '../../../services/psu-hospital.service';
 @Component({
   selector: 'app-feeds',
   templateUrl: './feeds.page.html',
@@ -32,11 +32,11 @@ export class FeedsPage implements OnInit {
     console.log(this.searchInput);
     this.setFilteredLocations();
   }
+
   setFilteredLocations() {
     this.filterLocations = this.allLocations.filter((item) => {
       return item.name.toLowerCase().indexOf(this.searchInput.toLowerCase()) > -1;
     });
   }
-
 
 }
