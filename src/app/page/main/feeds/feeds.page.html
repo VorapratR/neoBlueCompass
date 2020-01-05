@@ -19,12 +19,6 @@
         <ion-icon name="list"></ion-icon>
       </ion-button>
     </ion-item>
-    <!-- list type 
-      <div *ngFor="let location of filterLocations; let i = index">
-      <app-location *ngIf="location" [location]="location" [index]="i"></app-location>
-    </div>     -->
-
-    <!-- card type -->
     <ion-row>
       <ion-col *ngFor="let location of filterLocations; let i = index">
         <app-location *ngIf="location" [location]="location" [index]="i" [typeShowData]="typeShowData"></app-location>

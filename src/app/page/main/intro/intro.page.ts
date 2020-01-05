@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class IntroPage implements OnInit {
 
-  showButton = true;
+  showButton = false;
   statusPage = true;
   constructor(private router: Router) {
     this.checkState(this.statusPage);

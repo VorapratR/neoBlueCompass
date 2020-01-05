@@ -14,14 +14,15 @@
     </h4>
   </ion-item>
   <ion-card>
-    <ion-item color="indigo" shape="round" >
+    <ion-item color="indigo" shape="round">
       <ion-avatar slot="start">
         <img src="../../../../assets/compass.svg">
       </ion-avatar>
       <ion-label>
-        <h1><b>ชื่อ ...... </b></h1>
-        <h2>วันที่: ../../.. </h2>
+        <h1><b> {{nameGoal || 'ไม่พบข้อมูล'}} </b></h1>
+        <h2> ID: {{idGoal || 'ไม่พบข้อมูล'}} </h2>
       </ion-label>
+      <ion-button *ngIf="!idGoal" size="large" color="danger" (click)="backBeforePage()">X</ion-button>
     </ion-item>
   </ion-card>
   <ion-item>
@@ -30,38 +31,44 @@
     </h4>
   </ion-item>
   <ion-card color="indigo" *ngIf="statusFindMyLocation">
+    <ion-card-title text-center style="margin-left: 3%;margin-top: -3%;">
+      <h4 style="color:rgb(255, 255, 255);">
+        <b>รูปแบบการระบุตำแหน่ง</b>
+      </h4>
+    </ion-card-title>
     <ion-card-header>
-      <h4><b>รูปแบบการระบุตำแหน่ง</b></h4>
-      <div text-center style="margin-right: auto;margin-left: auto;">
+      <div text-center style="margin-right: auto;margin-left: auto;margin-top: -7%;">
         <ion-button (click)="onQrCode()">
-          <ion-icon name="camera" ></ion-icon>QR Code
+          <ion-icon name="camera"></ion-icon>QR Code
         </ion-button>
         <ion-button (click)="onBeacon()">
-          <ion-icon name="bluetooth" ></ion-icon>Beacon
+          <ion-icon name="bluetooth"></ion-icon>Beacon
         </ion-button>
       </div>
     </ion-card-header>
-    <ion-card-content *ngIf="showDetail" >
+    <ion-card-content style="margin-right: auto;margin-left: auto;margin-top: -7%;" *ngIf="showDetail">
       {{findLocationDetail}}
     </ion-card-content>
-    <div *ngIf="showDetail" style="margin-right: auto;margin-left: auto;margin-bottom: 2%;" text-center>
-      <ion-button shape="round" fill="outline" color="light" (click)="onStart()">ฉันพร้อมจะระบุตำแหน่งแล้ว</ion-button>
+    <div *ngIf="showDetail" style="margin-right: auto;margin-left: auto;margin-bottom: 2%;margin-top: -5%;" text-center>
+      <ion-button shape="round" fill="outline" color="light" (click)="qrCodeScaner()">ฉันพร้อมจะระบุตำแหน่งแล้ว</ion-button>
     </div>
   </ion-card>
-  <ion-card *ngIf="!statusFindMyLocation" >
+  <ion-card *ngIf="!statusFindMyLocation">
     <ion-item shape="round" color="indigo">
       <ion-avatar slot="start">
         <img src="../../../../assets/compass.svg">
       </ion-avatar>
       <ion-label>
-        <h1><b>ชื่อ ...... </b></h1>
+        <h1><b> {{idStart}} </b></h1>
       </ion-label>
     </ion-item>
   </ion-card>
- 
+
   <div *ngIf="!statusFindMyLocation" style="margin-left: auto;margin-right: auto;text-align:center">
-    <ion-button  routerLink="/map" 
-    size="large" > เริ่มเดินทาง ! </ion-button>
+    <ion-button (click)="nextPage()" size="large"> เริ่มเดินทาง ! </ion-button>
+  </div>
+  <div style="margin-left: auto;margin-right: auto;text-align:center">
+    <ion-button (click)="nextPage()" size="large"> เริ่มเดินทาง ! </ion-button>
   </div>
 
 </ion-content>

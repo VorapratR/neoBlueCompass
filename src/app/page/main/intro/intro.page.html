@@ -26,7 +26,12 @@
   <div class="ion-padding">
     <ion-button *ngIf="showButton" expand="block" shape="round" (click)="goToMainPage()">
       <ion-text class="ion-padding">
-      Welcome to Application
+      ยินดีต้อนรับ
+      </ion-text>
+    </ion-button>
+    <ion-button *ngIf="!showButton" color="medium" expand="block" shape="round" (click)="goToMainPage()">
+      <ion-text class="ion-padding">
+      ฉันเข้าใจแล้ว,เริ่มได้เลย
       </ion-text>
     </ion-button>
   </div>
