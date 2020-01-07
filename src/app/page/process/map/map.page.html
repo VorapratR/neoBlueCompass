@@ -19,8 +19,8 @@
 </ion-header>
 
 <ion-content>
-  <pinch-zoom>
-    <img src="https://cdn.shortpixel.ai/client/to_webp,q_glossy,ret_img,w_1000/https://www.beartai.com/wp-content/uploads/2019/12/rise-of-skywalker-cover.jpg" />
+  <pinch-zoom [backgroundColor] = "color">
+    <ion-img #canvas [src]="imgCanvas"></ion-img>
   </pinch-zoom>
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button size="small" style="margin-bottom:20%">
