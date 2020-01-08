@@ -64,12 +64,6 @@ export class MapPage implements OnInit {
     ctx.fillStyle = '#DC143C';
     ctx.lineTo(500, 500);
     ctx.stroke();
-    // ctx.strokeStyle = '#00BFFF';
-    // ctx.lineWidth = 5;
-    // ctx.setLineDash([10, 10]);
-    // ctx.moveTo(0,0);
-    // ctx.lineTo(500,500);
-    // ctx.stroke();
   }
   backBeforePage() {
     this.location.back();
