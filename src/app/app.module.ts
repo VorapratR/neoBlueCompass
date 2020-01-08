@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 
 import { QRScanner} from '@ionic-native/qr-scanner/ngx';
+import { DeviceOrientation} from '@ionic-native/device-orientation/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 @NgModule({
@@ -30,6 +31,7 @@ import { IonicStorageModule } from '@ionic/storage';
     SplashScreen,
     QRScanner,
     BarcodeScanner,
+    DeviceOrientation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observer, Observable } from 'rxjs';
+import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
@@ -12,8 +13,8 @@ export class MapPage implements OnInit {
   imgPath: string;
   imgCanvas: string;
   color: string;
-  constructor(private location: Location, private router: Router) {
-    this.imgPath = '../../../../assets/zeroYear.jpg';
+  compass: number;
+  constructor(private location: Location, private router: Router, private deviceOrientation: DeviceOrientation) {
     this.imgPath = '../../../../assets/A-1.png';
     this.canvas = document.createElement('canvas');
     this.color = 'rgb(255,255,255)';
@@ -26,7 +27,6 @@ export class MapPage implements OnInit {
   }
 
   getBase64ImageFromURL(url: string) {
-    // tslint:disable-next-line: deprecation
     return Observable.create((observer: Observer<string>) => {
       const img = new Image();
       img.crossOrigin = 'Anonymous';
@@ -64,6 +64,27 @@ export class MapPage implements OnInit {
     ctx.fillStyle = '#DC143C';
     ctx.lineTo(500, 500);
     ctx.stroke();
+  }
+
+  getCompass() {
+    setInterval(() => {
+      console.log('test');
+      this.deviceOrientation.getCurrentHeading().then(
+        (data: DeviceOrientationCompassHeading) => {
+          this.compass = data.magneticHeading;
+        },
+        (error: any) => console.log(error)
+      );
+    }, 1000);
+    if (this.compass === 0 || this.compass === 360 ) {
+      console.log('เหนือ');
+    } else if (this.compass === 90 ) {
+      console.log('ออก');
+    } else if (this.compass === 180) {
+      console.log('ใต้');
+    } else if (this.compass === 270) {
+      console.log('ตก');
+    }
   }
   backBeforePage() {
     this.location.back();

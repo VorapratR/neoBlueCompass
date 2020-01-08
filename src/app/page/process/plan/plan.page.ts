@@ -57,10 +57,6 @@ export class PlanPage implements OnInit {
   }
 
   nextPage() {
-    this.storage.set('id', this.idStart);
-    this.storage.get('id').then((val) => {
-      console.log('Your age is', val);
-    });
     this.router.navigateByUrl('/map');
   }
 }
