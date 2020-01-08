@@ -33,6 +33,10 @@ const routes: Routes = [
   {
     path: 'map',
     loadChildren: () => import('./page/process/map/map.module').then( m => m.MapPageModule)
+  },
+  {
+    path: 'map/:start/:end',
+    loadChildren: () => import('./page/process/map/map.module').then( m => m.MapPageModule)
   }
 ];
 @NgModule({

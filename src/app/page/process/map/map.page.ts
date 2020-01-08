@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observer, Observable } from 'rxjs';
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
+import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
+import { Pedometer } from '@ionic-native/pedometer/ngx';
+import { Platform } from '@ionic/angular';
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
@@ -10,14 +13,33 @@ import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-nativ
 })
 export class MapPage implements OnInit {
   canvas: any;
+  pedometerData: any;
   imgPath: string;
   imgCanvas: string;
   color: string;
+  idStart: string;
+  idGoal: string;
+  navigateText: string;
   compass: number;
-  constructor(private location: Location, private router: Router, private deviceOrientation: DeviceOrientation) {
+  stepCount: number;
+  constructor(
+    private location: Location,
+    private router: Router,
+    private route: ActivatedRoute,
+    private deviceOrientation: DeviceOrientation,
+    private tts: TextToSpeech,
+    public pedoCtrl: Pedometer,
+    public platform: Platform,
+    public ngZoneCtrl: NgZone,
+
+  ) {
     this.imgPath = '../../../../assets/A-1.png';
     this.canvas = document.createElement('canvas');
     this.color = 'rgb(255,255,255)';
+    this.navigateText = 'มุ่งหน้าไป';
+    this.stepCount = 0;
+    this.idStart = this.route.snapshot.paramMap.get('start');
+    this.idGoal = this.route.snapshot.paramMap.get('end');
   }
 
   ngOnInit() {
@@ -86,6 +108,28 @@ export class MapPage implements OnInit {
       console.log('ตก');
     }
   }
+
+  textToSpeech() {
+    this.tts.speak({
+      text: this.navigateText,
+      locale: 'th-TH',
+      rate: 1
+    }).then(() => console.log('Success'))
+    .catch((reason: any) => console.log(reason));
+  }
+
+  startPedometer() {
+    if (this.platform.is('cordova')) {
+      this.pedoCtrl.startPedometerUpdates().subscribe((PedometerData) => {
+        this.pedometerData = PedometerData;
+        this.ngZoneCtrl.run(() => {
+          this.stepCount = this.pedometerData.numberOfSteps;
+        });
+     });
+    }
+
+  }
+
   backBeforePage() {
     this.location.back();
     console.log('back');

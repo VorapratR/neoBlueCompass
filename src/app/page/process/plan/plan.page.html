@@ -50,7 +50,8 @@
       {{findLocationDetail}}
     </ion-card-content>
     <div *ngIf="showDetail" style="margin-right: auto;margin-left: auto;margin-bottom: 2%;margin-top: -5%;" text-center>
-      <ion-button shape="round" fill="outline" color="light" (click)="qrCodeScaner()">ฉันพร้อมจะระบุตำแหน่งแล้ว</ion-button>
+      <ion-button *ngIf="typeScan" shape="round" fill="outline" color="light" (click)="qrCodeScaner()">ฉันพร้อมจะระบุตำแหน่งแล้ว</ion-button>
+      <ion-button *ngIf="!typeScan"shape="round" fill="outline" color="light" (click)="beaconScaner()">ฉันพร้อมจะระบุตำแหน่งแล้ว</ion-button>
     </div>
   </ion-card>
   <ion-card *ngIf="!statusFindMyLocation">
