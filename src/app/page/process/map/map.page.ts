@@ -1,17 +1,18 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observer, Observable } from 'rxjs';
+import { Observer, Observable, Subscription } from 'rxjs';
 import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { Pedometer } from '@ionic-native/pedometer/ngx';
 import { Platform } from '@ionic/angular';
+import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
 })
-export class MapPage implements OnInit {
+export class MapPage implements OnInit, OnDestroy {
   canvas: any;
   pedometerData: any;
   imgPath: string;
@@ -22,6 +23,10 @@ export class MapPage implements OnInit {
   navigateText: string;
   compass: number;
   stepCount: number;
+  allLocations: Array<Location> = [];
+  bsub: Subscription;
+  pathResult: any = {};
+  pathCoordinations: any = [];
   constructor(
     private location: Location,
     private router: Router,
@@ -31,21 +36,65 @@ export class MapPage implements OnInit {
     public pedoCtrl: Pedometer,
     public platform: Platform,
     public ngZoneCtrl: NgZone,
-
+    private psuHospitalService: PsuHospitalService,
   ) {
-    this.imgPath = '../../../../assets/A-1.png';
+    this.imgPath = '../../../../assets/maps/baramee1.png';
     this.canvas = document.createElement('canvas');
     this.color = 'rgb(255,255,255)';
     this.navigateText = 'มุ่งหน้าไป';
     this.stepCount = 0;
     this.idStart = this.route.snapshot.paramMap.get('start');
     this.idGoal = this.route.snapshot.paramMap.get('end');
+    // console.log(typeof(this.idStart));
+    // console.log(this.idGoal);
+  }
+
+  findPath() {
+    const nodeDijkstra = require('node-dijkstra');
+    this.bsub = this.psuHospitalService.loadLocation().subscribe(
+      data => {
+        this.pathResult = {};
+        this.allLocations = data.locations;
+        const results = {};
+        Object.keys(this.allLocations).map(
+          elem => {
+            const query = this.allLocations[elem]['id'];
+            results[query] = this.allLocations[elem]['neighbor'];
+          }
+        );
+        const route = new nodeDijkstra(results);
+        this.pathResult = route.path('baramee1_1', 'baramee1_10', { cost: true });
+        const drawResult = [];
+        this.pathResult['path'].forEach(element => {
+          Object.keys(this.allLocations).map(
+            elem => {
+              let obj = {};
+              if (element === this.allLocations[elem]['id']) {
+                obj = {
+                  id: this.allLocations[elem]['id'],
+                  x: this.allLocations[elem]['x'],
+                  y: this.allLocations[elem]['y'],
+                };
+                drawResult.push(obj);
+              }
+            }
+          );
+        });
+        this.pathCoordinations = drawResult;
+        // console.log('drawResult => ', drawResult);
+      }
+    );
   }
 
   ngOnInit() {
     this.getBase64ImageFromURL(this.imgPath).subscribe(data => {
       this.imgCanvas = 'data:image/jpg;base64,' + data;
     });
+    this.findPath();
+  }
+
+  ngOnDestroy() {
+    this.bsub.unsubscribe();
   }
 
   getBase64ImageFromURL(url: string) {
@@ -72,11 +121,13 @@ export class MapPage implements OnInit {
     this.canvas.width = img.width;
     this.canvas.height = img.height;
     this.drawLine(this.canvas.getContext('2d'), img);
-    const dataURL =  this.canvas.toDataURL('image/png');
+    const dataURL = this.canvas.toDataURL('image/png');
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
 
   drawLine(ctx: any, img: HTMLImageElement) {
+    console.log('in drawline', this.pathCoordinations);
+    // console.log('in drawLine', this.pathResult);
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
     ctx.strokeStyle = '#00BFFF';
@@ -98,9 +149,9 @@ export class MapPage implements OnInit {
         (error: any) => console.log(error)
       );
     }, 1000);
-    if (this.compass === 0 || this.compass === 360 ) {
+    if (this.compass === 0 || this.compass === 360) {
       console.log('เหนือ');
-    } else if (this.compass === 90 ) {
+    } else if (this.compass === 90) {
       console.log('ออก');
     } else if (this.compass === 180) {
       console.log('ใต้');
@@ -115,7 +166,7 @@ export class MapPage implements OnInit {
       locale: 'th-TH',
       rate: 1
     }).then(() => console.log('Success'))
-    .catch((reason: any) => console.log(reason));
+      .catch((reason: any) => console.log(reason));
   }
 
   startPedometer() {
@@ -125,7 +176,7 @@ export class MapPage implements OnInit {
         this.ngZoneCtrl.run(() => {
           this.stepCount = this.pedometerData.numberOfSteps;
         });
-     });
+      });
     }
 
   }

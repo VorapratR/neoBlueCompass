@@ -17,7 +17,7 @@ export class LocationComponent implements OnInit {
   }
 
   goToPlanpage() {
-    const data = `/plan/${this.index}/${this.location.name}`;
+    const data = `/plan/${this.location.id}/${this.location.name}`;
     this.router.navigateByUrl(data);
   }
 

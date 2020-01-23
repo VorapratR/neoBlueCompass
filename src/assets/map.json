@@ -1,0 +1,584 @@
+{
+  "locations": [
+    {
+      "id": "baramee1_1",
+      "neighbor": {
+        "baramee1_2": 1
+      },
+      "x": 539,
+      "y": 1719,
+      "floor": 1,
+      "name": "ทางออกหน้าอาคาร"
+    },
+    {
+      "id": "baramee1_2",
+      "neighbor": {
+        "baramee1_3": 1,
+        "baramee1_20": 1,
+        "baramee1_1": 1
+      },
+      "x": 539,
+      "y": 1390,
+      "floor": 1,
+      "name": "คลินิกผิวหนัง"
+    },
+    {
+      "id": "baramee1_3",
+      "neighbor": {
+        "baramee1_2": 1,
+        "baramee1_4": 1
+      },
+      "x": 806,
+      "y": 1390,
+      "floor": 1,
+      "name": "ลิฟท์หน้าคลินิกผิวหนัง"
+    },
+    {
+      "id": "baramee1_4",
+      "neighbor": {
+        "baramee1_3": 1
+      },
+      "x": 920,
+      "y": 1390,
+      "floor": 1,
+      "name": "สะพานเชื่อมอาคารโรงพยาบาลชั้นที่ 1"
+    },
+    {
+      "id": "baramee1_20",
+      "neighbor": {
+        "baramee1_5": 1,
+        "baramee1_7": 1
+      },
+      "x": 539,
+      "y": 1157,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "baramee1_5",
+      "neighbor": {
+        "baramee1_20": 1,
+        "baramee1_6": 1
+      },
+      "x": 784,
+      "y": 1157,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "baramee1_6",
+      "neighbor": {
+        "baramee1_6": 1
+      },
+      "x": 784,
+      "y": 1203,
+      "floor": 1,
+      "name": "บันไดหลังลิฟท์"
+    },
+    {
+      "id": "baramee1_7",
+      "neighbor": {
+        "baramee1_20": 1,
+        "baramee1_8": 1
+      },
+      "x": 539,
+      "y": 1059,
+      "floor": 1,
+      "name": "คลินิกปฐมภูมิ"
+    },
+    {
+      "id": "baramee1_8",
+      "neighbor": {
+        "baramee1_9": 1,
+        "baramee1_7": 1,
+        "baramee1_11": 1
+      },
+      "x": 539,
+      "y": 962,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "baramee1_9",
+      "neighbor": {
+        "baramee1_10": 1,
+        "baramee1_8": 1
+      },
+      "x": 676,
+      "y": 962,
+      "floor": 1,
+      "name": "ห้องน้ำ"
+    },
+    {
+      "id": "baramee1_10",
+      "neighbor": {
+        "baramee1_9": 1
+      },
+      "x": 826,
+      "y": 962,
+      "floor": 1,
+      "name": "ลิฟท์หน้าคลินิกปฐมภูมิ"
+    },
+    {
+      "id": "baramee1_11",
+      "neighbor": {
+        "baramee1_12": 1,
+        "baramee1_8": 1,
+        "baramee1_13": 1,
+        "baramee1_14": 1
+      },
+      "x": 539,
+      "y": 767,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "baramee1_12",
+      "neighbor": {
+        "baramee1_11": 1
+      },
+      "x": 632,
+      "y": 767,
+      "floor": 1,
+      "name": "คลินิกฝากครรภ์"
+    },
+    {
+      "id": "baramee1_13",
+      "neighbor": {
+        "baramee1_11": 1
+      },
+      "x": 452,
+      "y": 767,
+      "floor": 1,
+      "name": "คลินิกเวชปฏิบัติ"
+    },
+    {
+      "id": "baramee1_14",
+      "neighbor": {
+        "baramee1_11": 1,
+        "baramee1_15": 1,
+        "baramee1_16": 1,
+        "baramee1_17": 1
+      },
+      "x": 539,
+      "y": 420,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "baramee1_15",
+      "neighbor": {
+        "baramee1_14": 1
+      },
+      "x": 425,
+      "y": 420,
+      "floor": 1,
+      "name": "คลินิกนรีเวช"
+    },
+    {
+      "id": "baramee1_16",
+      "neighbor": {
+        "baramee1_14": 1
+      },
+      "x": 539,
+      "y": 236,
+      "floor": 1,
+      "name": "บันไดหน้าห้องตรวจนรีเวช"
+    },
+    {
+      "id": "baramee1_17",
+      "neighbor": {
+        "baramee1_14": 1,
+        "baramee1_18": 1,
+        "baramee1_19": 1
+      },
+      "x": 803,
+      "y": 420,
+      "floor": 1,
+      "name": "คลินิกเวชปฏิบัติ"
+    },
+    {
+      "id": "baramee1_18",
+      "neighbor": {
+        "baramee1_17": 1
+      },
+      "x": 803,
+      "y": 238,
+      "floor": 1,
+      "name": "H.D.C และคลินิกให้คำปรึกษา"
+    },
+    {
+      "id": "baramee1_19",
+      "neighbor": {
+        "baramee1_18": 1
+      },
+      "x": 915,
+      "y": 420,
+      "floor": 1,
+      "name": "สะพานเชื่อมอาคารโรงพยาบาลชั้นที่ 1"
+    },
+    {
+      "id": "main1_1",
+      "neighbor": {
+        "main1_2": 1,
+        "main1_4": 1
+      },
+      "x": 526,
+      "y": 1708,
+      "floor": 1,
+      "name": "ทางเข้าอาคารโรงพยาบาล 1"
+    },
+    {
+      "id": "main1_2",
+      "neighbor": {
+        "main1_1": 1,
+        "main1_3": 1
+      },
+      "x": 694,
+      "y": 1708,
+      "floor": 1,
+      "name": "ทางเข้าอาคารโรงพยาบาล 2"
+    },
+    {
+      "id": "main1_3",
+      "neighbor": {
+        "main1_2": 1,
+        "main1_5": 1,
+        "main1_7": 1
+      },
+      "x": 694,
+      "y": 1591,
+      "floor": 1,
+      "name": "ทางเข้าอาคารโรงพยาบาล 1"
+    },
+    {
+      "id": "main1_4",
+      "neighbor": {
+        "main1_1": 1,
+        "main1_11": 1,
+        "main1_10": 1
+      },
+      "x": 526,
+      "y": 1615,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_5",
+      "neighbor": {
+        "main1_6": 1,
+        "main1_3": 1
+      },
+      "x": 870,
+      "y": 1591,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_6",
+      "neighbor": {
+        "main1_5": 1
+      },
+      "x": 870,
+      "y": 1559,
+      "floor": 1,
+      "name": "เวชระเบียน"
+    },
+    {
+      "id": "main1_7",
+      "neighbor": {
+        "main1_54": 1,
+        "main1_3": 1
+      },
+      "x": 710,
+      "y": 1554,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_54",
+      "neighbor": {
+        "main1_7": 1,
+        "main1_8": 1
+      },
+      "x": 660,
+      "y": 1556,
+      "floor": 1,
+      "name": "ประชาสัมพันธ์เ้"
+    },
+    {
+      "id": "main1_8",
+      "neighbor": {
+        "main1_9": 1,
+        "main1_54": 1,
+        "main1_10": 1
+      },
+      "x": 608,
+      "y": 1556,
+      "floor": 1,
+      "name": "ประชาสัมพันธ์"
+    },
+    {
+      "id": "main1_9",
+      "neighbor": {
+        "main1_8": 1
+      },
+      "x": 608,
+      "y": 1500,
+      "floor": 1,
+      "name": "ลิฟท์ข้างประชาสัมพันธ์"
+    },
+    {
+      "id": "main1_10",
+      "neighbor": {
+        "main1_4": 1,
+        "main1_55": 1
+      },
+      "x": 523,
+      "y": 1556,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_11",
+      "neighbor": {
+        "main1_12": 1,
+        "main1_13": 1,
+        "main1_4": 1,
+        "main1_14": 1
+      },
+      "x": 372,
+      "y": 1615,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_12",
+      "neighbor": {
+        "main1_11": 1
+      },
+      "x": 395,
+      "y": 1647,
+      "floor": 1,
+      "name": "ธนาคารกรุงไทย"
+    },
+    {
+      "id": "main1_13",
+      "neighbor": {
+        "main1_11": 1
+      },
+      "x": 372,
+      "y": 1591,
+      "floor": 1,
+      "name": "คลินิกเด็กหน้าธนาคารกรุงเทพ"
+    },
+    {
+      "id": "main1_14",
+      "neighbor": {
+        "main1_15": 1,
+        "main1_16": 1,
+        "main1_11": 1
+      },
+      "x": 283,
+      "y": 1615,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_15",
+      "neighbor": {
+        "main1_14": 1
+      },
+      "x": 283,
+      "y": 1652,
+      "floor": 1,
+      "name": "ATM ธนาคารธนชาต"
+    },
+    {
+      "id": "main1_16",
+      "neighbor": {
+        "main1_14": 1,
+        "main1_17": 1,
+        "main1_18": 1
+      },
+      "x": 237,
+      "y": 1615,
+      "floor": 1,
+      "name": "ATM ธนาคารไทยพาณิช"
+    },
+    {
+      "id": "main1_17",
+      "neighbor": {
+        "main1_16": 1
+      },
+      "x": 237,
+      "y": 1596,
+      "floor": 1,
+      "name": "หน่วยเวชสำอาง"
+    },
+    {
+      "id": "main1_18",
+      "neighbor": {
+        "main1_20": 1,
+        "main1_19": 1,
+        "main1_16": 1
+      },
+      "x": 172,
+      "y": 1615,
+      "floor": 1,
+      "name": "ATM ธนาคารธนชาต"
+    },
+    {
+      "id": "main1_19",
+      "neighbor": {
+        "main1_18": 1
+      },
+      "x": 172,
+      "y": 1697,
+      "floor": 1,
+      "name": "บันไดทางออกข้างอาคารบารมีฯ"
+    },
+    {
+      "id": "main1_20",
+      "neighbor": {
+        "main1_21": 1,
+        "main1_18": 1,
+        "main1_22": 1
+      },
+      "x": 172,
+      "y": 1570,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_21",
+      "neighbor": {
+        "main1_20": 1
+      },
+      "x": 172,
+      "y": 1527,
+      "floor": 1,
+      "name": "ศูนย์ให้ยาเคมีบำบัด"
+    },
+    {
+      "id": "main1_22",
+      "neighbor": {
+        "main1_20": 1,
+        "baramee1_4": 1
+      },
+      "x": 73,
+      "y": 1570,
+      "floor": 1,
+      "name": "สะพานเชื่อมอาคารบารมีฯ"
+    },
+    {
+      "id": "main1_23",
+      "neighbor": {
+        "main1_24": 1
+      },
+      "x": 853,
+      "y": 1374,
+      "floor": 1,
+      "name": "คลินิกอายุกรรม"
+    },
+    {
+      "id": "main1_24",
+      "neighbor": {
+        "main1_23": 1,
+        "main1_7": 1,
+        "main1_26": 1
+      },
+      "x": 710,
+      "y": 1374,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_25",
+      "neighbor": {
+        "main1_26": 1
+      },
+      "x": 842,
+      "y": 1177,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_26",
+      "neighbor": {
+        "main1_25": 1,
+        "main1_27": 1,
+        "main1_24": 1
+      },
+      "x": 710,
+      "y": 1177,
+      "floor": 1,
+      "name": "ห้องตรวจวัดคลื่นไฟฟ้าหัวใจ"
+    },
+    {
+      "id": "main1_27",
+      "neighbor": {
+        "main1_26": 1,
+        "main1_28": 1
+      },
+      "x": 710,
+      "y": 1134,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_28",
+      "neighbor": {
+        "main1_27": 1,
+        "main1_29": 1,
+        "main1_30": 1
+      },
+      "x": 710,
+      "y": 1069,
+      "floor": 1,
+      "name": "คลินิกทำแผลและฉีดยา"
+    },
+    {
+      "id": "main1_29",
+      "neighbor": {
+        "main1_28": 1
+      },
+      "x": 710,
+      "y": 1012,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_30",
+      "neighbor": {
+        "main1_29": 1,
+        "main1_31": 1
+      },
+      "x": 870,
+      "y": 1012,
+      "floor": 1,
+      "name": ""
+    },
+    {
+      "id": "main1_31",
+      "neighbor": {
+        "main1_30": 1,
+        "main1_32": 1
+      },
+      "x": 965,
+      "y": 1012,
+      "floor": 1,
+      "name": "ห้องน้ำ (คลินิกแผลและฉีดยา)"
+    },
+    {
+      "id": "main1_32",
+      "neighbor": {
+        "main1_31": 1
+      },
+      "x": 1019,
+      "y": 1012,
+      "floor": 1,
+      "name": "ทางออกข้างอาคาร"
+    }
+  ]
+}

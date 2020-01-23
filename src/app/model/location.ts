@@ -1,10 +1,13 @@
 export interface Location {
-    name: string;
-    building: string;
+    name?: string;
+    // building: string;
+    neighbor: object;
+    x: number;
+    y: number;
     floor: number;
-    id: number;
+    id: string;
 }
 export interface LocationQuery {
     results: Location[];
-    lastPage: boolean;
+    // lastPage: boolean;
 }

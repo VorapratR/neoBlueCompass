@@ -30,7 +30,7 @@ export class PlanPage implements OnInit {
     this.showDetail = false;
     this.statusFindMyLocation = true;
     this.idGoal = this.route.snapshot.paramMap.get('id');
-    this.nameGoal = this.route.snapshot.paramMap.get('name');
+    this.nameGoal = this.route.snapshot.paramMap.get('name'); 
   }
 
   ngOnInit() {
