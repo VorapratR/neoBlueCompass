@@ -7,6 +7,7 @@ import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { Pedometer } from '@ionic-native/pedometer/ngx';
 import { Platform } from '@ionic/angular';
 import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
+import { element } from 'protractor';
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
@@ -63,7 +64,8 @@ export class MapPage implements OnInit, OnDestroy {
           }
         );
         const route = new nodeDijkstra(results);
-        this.pathResult = route.path('baramee1_1', 'baramee1_10', { cost: true });
+        this.pathResult = route.path(this.idStart, this.idGoal, { cost: true });
+        console.log(this.pathResult);
         const drawResult = [];
         this.pathResult['path'].forEach(element => {
           Object.keys(this.allLocations).map(
@@ -131,8 +133,11 @@ export class MapPage implements OnInit, OnDestroy {
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
     ctx.strokeStyle = '#00BFFF';
-    ctx.setLineDash([10, 10]);
-    ctx.lineWidth = 5;
+    ctx.setLineDash([50, 3]);
+    ctx.lineWidth = 30;
+    this.pathCoordinations.forEach(element => {
+      console.log('=>', element);
+    });
     ctx.moveTo(0, 0);
     ctx.fillStyle = '#DC143C';
     ctx.lineTo(500, 500);

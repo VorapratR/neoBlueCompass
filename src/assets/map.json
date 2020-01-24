@@ -36,7 +36,8 @@
     {
       "id": "baramee1_4",
       "neighbor": {
-        "baramee1_3": 1
+        "baramee1_3": 1,
+        "main1_22": 1
       },
       "x": 920,
       "y": 1390,
@@ -288,6 +289,7 @@
       "id": "main1_7",
       "neighbor": {
         "main1_54": 1,
+        "main1_24": 1,
         "main1_3": 1
       },
       "x": 710,
