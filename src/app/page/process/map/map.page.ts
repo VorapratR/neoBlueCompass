@@ -132,6 +132,7 @@ export class MapPage implements OnInit, OnDestroy {
     // console.log('in drawLine', this.pathResult);
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
+    ctx.arc(100, 100, 50, 0, 2 * Math.PI, false);
     ctx.strokeStyle = '#00BFFF';
     ctx.setLineDash([50, 3]);
     ctx.lineWidth = 30;
