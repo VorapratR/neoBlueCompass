@@ -8,6 +8,7 @@ import { Pedometer } from '@ionic-native/pedometer/ngx';
 import { Platform } from '@ionic/angular';
 import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
 import { element } from 'protractor';
+import { SSL_OP_CRYPTOPRO_TLSEXT_BUG } from 'constants';
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
@@ -135,12 +136,26 @@ export class MapPage implements OnInit, OnDestroy {
     ctx.strokeStyle = '#00BFFF';
     ctx.setLineDash([50, 3]);
     ctx.lineWidth = 30;
-    this.pathCoordinations.forEach(element => {
-      console.log('=>', element);
-    });
-    ctx.moveTo(0, 0);
+    // this.pathCoordinations.forEach((element: any) => {
+    //   console.log('=>', element);
+    // });
+    // let i = 0;
+    for (let i = 0; i<this.pathCoordinations.length; i++){
+      // console.log(this.pathCoordinations[i].id, ' ,', this.pathCoordinations[i + 1].id);
+      if (this.pathCoordinations[i + 1] != null) {
+        ctx.moveTo(this.pathCoordinations[i + 1].x, this.pathCoordinations[i + 1].y);
+      }
+      ctx.fillStyle = '#DC143C';
+    }
+    // this.pathCoordinations.map(
+    //   x => {
+    //     console.log('map -->', x, this.pathCoordinations.indexOf(x));
+    //     ctx.moveTo()
+    //   }
+    // );
+    // ctx.moveTo(0, 0);
     ctx.fillStyle = '#DC143C';
-    ctx.lineTo(500, 500);
+    // ctx.lineTo(500, 500);
     ctx.stroke();
   }
 
