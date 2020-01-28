@@ -133,30 +133,31 @@ export class MapPage implements OnInit, OnDestroy {
     // console.log('in drawLine', this.pathResult);
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
-    ctx.arc(100, 100, 50, 0, 2 * Math.PI, false);
+    // ctx.arc(100, 100, 50, 0, 2 * Math.PI, false);
     ctx.strokeStyle = '#00BFFF';
-    ctx.setLineDash([50, 3]);
-    ctx.lineWidth = 30;
+    ctx.setLineDash([20, 5]);
+    ctx.lineWidth = 15;
     // this.pathCoordinations.forEach((element: any) => {
     //   console.log('=>', element);
     // });
     // let i = 0;
-    for (let i = 0; i<this.pathCoordinations.length; i++){
+    for (let i = 0; i < this.pathCoordinations.length; i++) {
       // console.log(this.pathCoordinations[i].id, ' ,', this.pathCoordinations[i + 1].id);
-      if (this.pathCoordinations[i + 1] != null) {
+      if (i === 0) {
         ctx.moveTo(this.pathCoordinations[i + 1].x, this.pathCoordinations[i + 1].y);
+        ctx.fillStyle = '#DC143C';
+        ctx.fillRect(this.pathCoordinations[i + 1].x - 10, this.pathCoordinations[i + 1].y, 20, 20);
+      } else if (this.pathCoordinations[i + 1] == null) {
+        // console.log("in case");
+        ctx.moveTo(this.pathCoordinations[i].x, this.pathCoordinations[i].y);
+        ctx.fillStyle = '#DC143C';
+        ctx.fillRect(this.pathCoordinations[i].x - 10, this.pathCoordinations[i].y - 20, 20, 20);
+      } else if (this.pathCoordinations[i + 1] != null) {
+        ctx.lineTo(this.pathCoordinations[i + 1].x, this.pathCoordinations[i + 1].y);
+        // ctx.fillStyle = '#00BFFF';
       }
-      ctx.fillStyle = '#DC143C';
     }
-    // this.pathCoordinations.map(
-    //   x => {
-    //     console.log('map -->', x, this.pathCoordinations.indexOf(x));
-    //     ctx.moveTo()
-    //   }
-    // );
-    // ctx.moveTo(0, 0);
     ctx.fillStyle = '#DC143C';
-    // ctx.lineTo(500, 500);
     ctx.stroke();
   }
 
