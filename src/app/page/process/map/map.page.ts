@@ -17,8 +17,8 @@ import { SSL_OP_CRYPTOPRO_TLSEXT_BUG } from 'constants';
 export class MapPage implements OnInit, OnDestroy {
   canvas: any;
   pedometerData: any;
-  imgPath: string;
-  imgCanvas: string;
+  imgPath: Array<string> = [];
+  imgCanvas: Array<string> = [];
   color: string;
   idStart: string;
   idGoal: string;
@@ -40,7 +40,8 @@ export class MapPage implements OnInit, OnDestroy {
     public ngZoneCtrl: NgZone,
     private psuHospitalService: PsuHospitalService,
   ) {
-    this.imgPath = '../../../../assets/maps/baramee1.png';
+    this.imgPath.push('../../../../assets/maps/baramee1.png');
+    this.imgPath.push('../../../../assets/maps/main1.png');
     this.canvas = document.createElement('canvas');
     this.color = 'rgb(255,255,255)';
     this.navigateText = 'มุ่งหน้าไป';
@@ -90,10 +91,13 @@ export class MapPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getBase64ImageFromURL(this.imgPath).subscribe(data => {
-      this.imgCanvas = 'data:image/jpg;base64,' + data;
-    });
     this.findPath();
+    // tslint:disable-next-line: no-shadowed-variable
+    this.imgPath.forEach(element => {
+      this.getBase64ImageFromURL(element).subscribe(data => {
+        this.imgCanvas.push('data:image/jpg;base64,' + data);
+      });
+    });
   }
 
   ngOnDestroy() {
@@ -123,26 +127,24 @@ export class MapPage implements OnInit, OnDestroy {
   getBase64Image(img: HTMLImageElement) {
     this.canvas.width = img.width;
     this.canvas.height = img.height;
-    this.drawLine(this.canvas.getContext('2d'), img);
+    console.log(img.src.includes('baramee1'));
+    if (img.src.includes('baramee1')) {
+      this.drawLine(this.canvas.getContext('2d'), img);
+    }
+    // this.drawLine(this.canvas.getContext('2d'), img);
     const dataURL = this.canvas.toDataURL('image/png');
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
 
   drawLine(ctx: any, img: HTMLImageElement) {
     console.log('in drawline', this.pathCoordinations);
-    // console.log('in drawLine', this.pathResult);
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
     // ctx.arc(100, 100, 50, 0, 2 * Math.PI, false);
     ctx.strokeStyle = '#00BFFF';
     ctx.setLineDash([20, 5]);
     ctx.lineWidth = 15;
-    // this.pathCoordinations.forEach((element: any) => {
-    //   console.log('=>', element);
-    // });
-    // let i = 0;
     for (let i = 0; i < this.pathCoordinations.length; i++) {
-      // console.log(this.pathCoordinations[i].id, ' ,', this.pathCoordinations[i + 1].id);
       if (i === 0) {
         ctx.moveTo(this.pathCoordinations[i + 1].x, this.pathCoordinations[i + 1].y);
         ctx.fillStyle = '#DC143C';

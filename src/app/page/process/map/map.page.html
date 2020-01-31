@@ -19,9 +19,14 @@
 </ion-header>
 
 <ion-content>
-  <pinch-zoom [backgroundColor] = "color">
-    <ion-img #canvas [src]="imgCanvas"></ion-img>
-  </pinch-zoom>
+  <ion-slides color="danger" class="img" pager="true">
+    <ion-slide *ngFor="let image of imgCanvas" color="danger">
+      <pinch-zoom [backgroundColor] = "color">
+        <ion-img #canvas [src]="image"></ion-img>
+      </pinch-zoom>
+    </ion-slide>
+  </ion-slides>
+
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button size="small" style="margin-bottom:20%">
       <ion-icon name="volume-high"></ion-icon>
