@@ -160,16 +160,16 @@ export class MapPage implements OnInit, OnDestroy {
     ctx.lineWidth = 15;
     for (let i = 0; i < nodePath.length; i++) {
       if (i === 0) {
-        ctx.moveTo(nodePath[i + 1].x, nodePath[i + 1].y);
+        ctx.moveTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
         ctx.fillStyle = '#DC143C';
-        ctx.fillRect(nodePath[i + 1].x - 10, nodePath[i + 1].y, 20, 20);
+        ctx.fillRect(nodePath[i + 1]['x'] - 10, nodePath[i + 1]['y'], 20, 20);
       } else if (nodePath[i + 1] == null) {
         // console.log("in case");
-        ctx.moveTo(nodePath[i].x, nodePath[i].y);
+        ctx.moveTo(nodePath[i]['x'], nodePath[i]['y']);
         ctx.fillStyle = '#DC143C';
-        ctx.fillRect(nodePath[i].x - 10, nodePath[i].y - 20, 20, 20);
+        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'] - 20, 20, 20);
       } else if (nodePath[i + 1] != null) {
-        ctx.lineTo(nodePath[i + 1].x, nodePath[i + 1].y);
+        ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
         // ctx.fillStyle = '#00BFFF';
       }
     }
