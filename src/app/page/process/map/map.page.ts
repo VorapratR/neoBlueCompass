@@ -28,7 +28,7 @@ export class MapPage implements OnInit, OnDestroy {
   allLocations: Array<Location> = [];
   bsub: Subscription;
   pathResult: any = {};
-  pathCoordinations: any = [];
+  pathCoordinations: any[][] = [[], []];
   constructor(
     private location: Location,
     private router: Router,
@@ -61,14 +61,19 @@ export class MapPage implements OnInit, OnDestroy {
         const results = {};
         Object.keys(this.allLocations).map(
           elem => {
-            const query = this.allLocations[elem]['id'];
-            results[query] = this.allLocations[elem]['neighbor'];
+            const pathId = this.allLocations[elem]['id'];
+            results[pathId] = this.allLocations[elem]['neighbor'];
           }
         );
         const route = new nodeDijkstra(results);
         this.pathResult = route.path(this.idStart, this.idGoal, { cost: true });
-        console.log(this.pathResult);
-        const drawResult = [];
+        // console.log(this.pathResult);
+        // console.log(paths);
+        // tslint:disable-next-line: forin
+        // this.pathResult['path'].forEach(path => {
+          // if
+        // });
+        const drawResult = [[], []];
         this.pathResult['path'].forEach(element => {
           Object.keys(this.allLocations).map(
             elem => {
@@ -79,10 +84,16 @@ export class MapPage implements OnInit, OnDestroy {
                   x: this.allLocations[elem]['x'],
                   y: this.allLocations[elem]['y'],
                 };
-                drawResult.push(obj);
-              }
-            }
-          );
+                if (this.allLocations[elem]['id'].includes('baramee1')) {
+                  console.log(true);
+                  drawResult[0].push(obj);
+                }
+                else if (this.allLocations[elem]['id'].includes('main1')) {
+                  console.log(false);
+                  drawResult[1].push(obj);
+                }
+                console.log(drawResult);
+              }});
         });
         this.pathCoordinations = drawResult;
         // console.log('drawResult => ', drawResult);
@@ -127,35 +138,38 @@ export class MapPage implements OnInit, OnDestroy {
   getBase64Image(img: HTMLImageElement) {
     this.canvas.width = img.width;
     this.canvas.height = img.height;
-    console.log(img.src.includes('baramee1'));
+    // console.log(img.src.includes('baramee1'));
     if (img.src.includes('baramee1')) {
-      this.drawLine(this.canvas.getContext('2d'), img);
+      this.drawLine(this.canvas.getContext('2d'), img, this.pathCoordinations[0]);
+    }
+    if (img.src.includes('main1')) {
+      this.drawLine(this.canvas.getContext('2d'), img, this.pathCoordinations[1]);
     }
     // this.drawLine(this.canvas.getContext('2d'), img);
     const dataURL = this.canvas.toDataURL('image/png');
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
 
-  drawLine(ctx: any, img: HTMLImageElement) {
-    console.log('in drawline', this.pathCoordinations);
+  drawLine(ctx: any, img: HTMLImageElement, nodePath: Object[]) {
+    // console.log('in drawline', this.pathCoordinations);
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
     // ctx.arc(100, 100, 50, 0, 2 * Math.PI, false);
     ctx.strokeStyle = '#00BFFF';
     ctx.setLineDash([20, 5]);
     ctx.lineWidth = 15;
-    for (let i = 0; i < this.pathCoordinations.length; i++) {
+    for (let i = 0; i < nodePath.length; i++) {
       if (i === 0) {
-        ctx.moveTo(this.pathCoordinations[i + 1].x, this.pathCoordinations[i + 1].y);
+        ctx.moveTo(nodePath[i + 1].x, nodePath[i + 1].y);
         ctx.fillStyle = '#DC143C';
-        ctx.fillRect(this.pathCoordinations[i + 1].x - 10, this.pathCoordinations[i + 1].y, 20, 20);
-      } else if (this.pathCoordinations[i + 1] == null) {
+        ctx.fillRect(nodePath[i + 1].x - 10, nodePath[i + 1].y, 20, 20);
+      } else if (nodePath[i + 1] == null) {
         // console.log("in case");
-        ctx.moveTo(this.pathCoordinations[i].x, this.pathCoordinations[i].y);
+        ctx.moveTo(nodePath[i].x, nodePath[i].y);
         ctx.fillStyle = '#DC143C';
-        ctx.fillRect(this.pathCoordinations[i].x - 10, this.pathCoordinations[i].y - 20, 20, 20);
-      } else if (this.pathCoordinations[i + 1] != null) {
-        ctx.lineTo(this.pathCoordinations[i + 1].x, this.pathCoordinations[i + 1].y);
+        ctx.fillRect(nodePath[i].x - 10, nodePath[i].y - 20, 20, 20);
+      } else if (nodePath[i + 1] != null) {
+        ctx.lineTo(nodePath[i + 1].x, nodePath[i + 1].y);
         // ctx.fillStyle = '#00BFFF';
       }
     }
