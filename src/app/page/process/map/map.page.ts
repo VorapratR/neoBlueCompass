@@ -29,6 +29,7 @@ export class MapPage implements OnInit, OnDestroy {
   bsub: Subscription;
   graph: any = {};
   textOrder: string[] = ['เริ่มต้น'];
+  index = 0;
   pathResults: any[][] = [[], []];
   constructor(
     private location: Location,
@@ -49,8 +50,6 @@ export class MapPage implements OnInit, OnDestroy {
     this.stepCount = 0;
     this.idStart = this.route.snapshot.paramMap.get('start');
     this.idGoal = this.route.snapshot.paramMap.get('end');
-    // console.log(typeof(this.idStart));
-    // console.log(this.idGoal);
   }
 
   findPath() {
@@ -68,12 +67,6 @@ export class MapPage implements OnInit, OnDestroy {
         );
         const route = new nodeDijkstra(results);
         this.graph = route.path(this.idStart, this.idGoal, { cost: true });
-        // console.log(this.graph);
-        // console.log(paths);
-        // tslint:disable-next-line: forin
-        // this.graph['path'].forEach(path => {
-          // if
-        // });
         const drawResult = [[], []];
         this.graph.path.forEach(element => {
           Object.keys(this.allLocations).map(
@@ -100,17 +93,6 @@ export class MapPage implements OnInit, OnDestroy {
         this.pathResults = drawResult;
         let newArray = [];
         newArray = drawResult[0].concat(drawResult[1]);
-        // this.text
-        // console.log('drawResult => ', drawResult);
-        // console.log('newArray => ', newArray);
-        // const arrArray = [
-        //   ['Krunal', 'Ankit'],
-        //   ['Rushabh', 'Dhaval']
-        // ];
-        // arrArray.push([
-        //   'Tejash', 'Rajesh'
-        // ]);
-        // console.log(arrArray);
         this.generateText(newArray);
       }
     );
@@ -153,24 +135,20 @@ export class MapPage implements OnInit, OnDestroy {
   getBase64Image(img: HTMLImageElement) {
     this.canvas.width = img.width;
     this.canvas.height = img.height;
-    // console.log(img.src.includes('baramee1'));
     if (img.src.includes('baramee1')) {
       this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[0]);
     }
     if (img.src.includes('main1')) {
       this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[1]);
     }
-    // this.drawLine(this.canvas.getContext('2d'), img);
     const dataURL = this.canvas.toDataURL('image/png');
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
 
   // nodePath เป็น array ของ pathResults ที่ใช้ในการสร้าง map
   drawLine(ctx: any, img: HTMLImageElement, nodePath: Object[]) {
-    // console.log('in drawline', this.pathResults);
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
-    // ctx.arc(100, 100, 50, 0, 2 * Math.PI, false);
     ctx.strokeStyle = '#00BFFF';
     ctx.setLineDash([20, 5]);
     ctx.lineWidth = 15;
@@ -180,13 +158,11 @@ export class MapPage implements OnInit, OnDestroy {
         ctx.fillStyle = '#DC143C';
         ctx.fillRect(nodePath[i + 1].x - 10, nodePath[i + 1].y, 20, 20);
       } else if (nodePath[i + 1] == null) {
-        // console.log("in case");
         ctx.moveTo(nodePath[i].x, nodePath[i].y);
         ctx.fillStyle = '#DC143C';
         ctx.fillRect(nodePath[i].x - 10, nodePath[i].y - 20, 20, 20);
       } else if (nodePath[i + 1] != null) {
         ctx.lineTo(nodePath[i + 1].x, nodePath[i + 1].y);
-        // ctx.fillStyle = '#00BFFF';
       }
     }
     ctx.fillStyle = '#DC143C';
@@ -267,7 +243,25 @@ export class MapPage implements OnInit, OnDestroy {
     this.textOrder.pop();
     this.textOrder.push('เดินตรงไป');
     this.textOrder.push('ถึงจุดหมาย');
-    console.log(this.textOrder);
+    // console.log(this.textOrder);
+  }
+
+  nextText() {
+    if (this.index < this.textOrder.length) {
+      this.navigateText = this.textOrder[this.index];
+      this.index++;
+      this.textToSpeech();
+    }
+  }
+
+  backText() {
+    this.index--;
+    if (this.index <= 0) {
+      console.log('back1');
+    } else if (this.index < this.textOrder.length) {
+      this.navigateText = this.textOrder[this.index - 1];
+      this.textToSpeech();
+    }
   }
 
   backBeforePage() {
