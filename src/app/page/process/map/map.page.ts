@@ -10,6 +10,7 @@ import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
 import { element } from 'protractor';
 import { SSL_OP_CRYPTOPRO_TLSEXT_BUG } from 'constants';
 declare let unityARCaller: any;
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
