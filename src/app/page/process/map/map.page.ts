@@ -9,6 +9,7 @@ import { Platform } from '@ionic/angular';
 import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
 import { element } from 'protractor';
 import { SSL_OP_CRYPTOPRO_TLSEXT_BUG } from 'constants';
+declare let unityARCaller: any;
 @Component({
   selector: 'app-map',
   templateUrl: './map.page.html',
@@ -154,15 +155,15 @@ export class MapPage implements OnInit, OnDestroy {
     ctx.lineWidth = 15;
     for (let i = 0; i < nodePath.length; i++) {
       if (i === 0) {
-        ctx.moveTo(nodePath[i + 1].x, nodePath[i + 1].y);
+        ctx.moveTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
         ctx.fillStyle = '#DC143C';
-        ctx.fillRect(nodePath[i + 1].x - 10, nodePath[i + 1].y, 20, 20);
+        ctx.fillRect(nodePath[i + 1]['x'] - 10, nodePath[i + 1]['y'], 20, 20);
       } else if (nodePath[i + 1] == null) {
-        ctx.moveTo(nodePath[i].x, nodePath[i].y);
+        ctx.moveTo(nodePath[i]['x'], nodePath[i]['y']);
         ctx.fillStyle = '#DC143C';
-        ctx.fillRect(nodePath[i].x - 10, nodePath[i].y - 20, 20, 20);
+        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'] - 20, 20, 20);
       } else if (nodePath[i + 1] != null) {
-        ctx.lineTo(nodePath[i + 1].x, nodePath[i + 1].y);
+        ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
       }
     }
     ctx.fillStyle = '#DC143C';
@@ -243,7 +244,7 @@ export class MapPage implements OnInit, OnDestroy {
     this.textOrder.pop();
     this.textOrder.push('เดินตรงไป');
     this.textOrder.push('ถึงจุดหมาย');
-    // console.log(this.textOrder);
+    console.log(this.textOrder);
   }
 
   nextText() {
@@ -262,6 +263,29 @@ export class MapPage implements OnInit, OnDestroy {
       this.navigateText = this.textOrder[this.index - 1];
       this.textToSpeech();
     }
+  }
+
+  openUnity() {
+  // It is possible to send a string message to Unity-side (optional)
+    unityARCaller.launchAR( 'my message for Unity-side', this.uReturnedFromUnity, this.uMessageReceivedFromUnity );
+  }
+
+  sendMessageToUnity() {
+  // Send a message to Unity while Unity is still running
+    unityARCaller.sendMessage( 'Function name', 'Optional parameter' );
+  }
+
+  uReturnedFromUnity = (param) => {
+    // param:String is the (optional) message returned from Unity-side
+    alert( param );
+  }
+
+  uMessageReceivedFromUnity = (message) => {
+    // message:String is the message received from Unity-side
+    // If you call a UI-blocking function here like 'alert', subsequent messages from Unity
+    // will be queued by the OS and will only be received after returning to Ionic and
+    // unblocking the UI
+    console.log( '=========' + message + '=========' );
   }
 
   backBeforePage() {
