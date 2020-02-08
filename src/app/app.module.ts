@@ -11,7 +11,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 
-import { QRScanner} from '@ionic-native/qr-scanner/ngx';
 import { DeviceOrientation} from '@ionic-native/device-orientation/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { IonicStorageModule } from '@ionic/storage';
@@ -33,7 +32,6 @@ import { BLE} from '@ionic-native/ble/ngx';
   providers: [
     StatusBar,
     SplashScreen,
-    QRScanner,
     BarcodeScanner,
     DeviceOrientation,
     TextToSpeech,
