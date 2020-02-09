@@ -10,7 +10,6 @@ import { Subscriber, Subscription } from 'rxjs';
 export class FeedsPage implements OnInit, OnDestroy {
   allLocations: Array<Location> = [];
   filterLocations: Array<Location>  = [];
-  test: Array = [];
   lastPage  = false;
   textStatus = 'สถานที่ทั้งหมด';
   searchInput = '';
