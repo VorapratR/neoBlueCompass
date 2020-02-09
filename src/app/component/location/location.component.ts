@@ -14,6 +14,11 @@ export class LocationComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
+    if (this.location.id.includes('baramee')) {
+      this.location.building = 'อาคารบารมี ';
+    } else {
+      this.location.building = 'อาคารคณะแพทย์ ';
+    }
   }
 
   goToPlanpage() {

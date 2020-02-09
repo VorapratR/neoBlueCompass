@@ -1,6 +1,6 @@
 export interface Location {
-    name?: string;
-    // building: string;
+    name: string;
+    building: string;
     neighbor: object;
     x: number;
     y: number;

@@ -24,6 +24,7 @@ export class MapPage implements OnInit, OnDestroy {
   color: string;
   idStart: string;
   idGoal: string;
+  nameGoal: string;
   navigateText: string;
   compass: number;
   stepCount: number;
@@ -58,6 +59,11 @@ export class MapPage implements OnInit, OnDestroy {
     const nodeDijkstra = require('node-dijkstra');
     this.bsub = this.psuHospitalService.loadLocation().subscribe(
       data => {
+        data.locations.forEach( element => {
+          if (element.id === this.idGoal) {
+            this.nameGoal = element.name;
+          }
+        });
         this.graph = {};
         this.allLocations = data.locations;
         const results = {};
@@ -84,8 +90,7 @@ export class MapPage implements OnInit, OnDestroy {
                 if (this.allLocations[elem].id.includes('baramee1')) {
                   console.log(true);
                   drawResult[0].push(obj);
-                }
-                else if (this.allLocations[elem].id.includes('main1')) {
+                } else if (this.allLocations[elem].id.includes('main1')) {
                   console.log(false);
                   drawResult[1].push(obj);
                 }

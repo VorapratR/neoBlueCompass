@@ -17,3 +17,9 @@
 ion-card {
     border-radius: 20px;
 }
+
+.wrap-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+

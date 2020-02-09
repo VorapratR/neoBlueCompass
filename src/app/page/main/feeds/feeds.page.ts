@@ -10,6 +10,7 @@ import { Subscriber, Subscription } from 'rxjs';
 export class FeedsPage implements OnInit, OnDestroy {
   allLocations: Array<Location> = [];
   filterLocations: Array<Location>  = [];
+  test: Array = [];
   lastPage  = false;
   textStatus = 'สถานที่ทั้งหมด';
   searchInput = '';
@@ -19,16 +20,15 @@ export class FeedsPage implements OnInit, OnDestroy {
     // console.log('hello');
     this.asub = this.psuHospitalService.loadLocation().subscribe(
       data => {
-        // console.log(data)
-        this.allLocations = data.locations;
-        this.filterLocations = data.locations;
-        console.log(this.allLocations);
+        data.locations.forEach((item, index, object) => {
+          if (item.name.includes('')) {
+            object.splice(index, 1);
+          }
+          this.allLocations = data.locations;
+          this.filterLocations = data.locations;
+        });
+        console.log(this.filterLocations);
       }
-      // results => {
-      //   this.allLocations = results.results;
-      //   this.filterLocations = results.results;
-      //   this.lastPage = results.lastPage;
-      // }
     );
   }
 
