@@ -101,6 +101,9 @@ export class MapPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.textOrder = ['เริ่มต้น'];
+    this.index = 0;
+    this.pathResults = [[], []];
     this.findPath();
     // tslint:disable-next-line: no-shadowed-variable
     this.imgPath.forEach(element => {
@@ -155,10 +158,14 @@ export class MapPage implements OnInit, OnDestroy {
     ctx.setLineDash([20, 5]);
     ctx.lineWidth = 15;
     for (let i = 0; i < nodePath.length; i++) {
-      if (i === 0) {
+      if (i === 0 && i + 1 != null) {
         ctx.moveTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
         ctx.fillStyle = '#DC143C';
         ctx.fillRect(nodePath[i + 1]['x'] - 10, nodePath[i + 1]['y'], 20, 20);
+      } else if (i === 0 && i + 1 === null) {
+        ctx.moveTo(nodePath[i]['x'], nodePath[i]['y']);
+        ctx.fillStyle = '#DC143C';
+        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'] - 20, 20, 20);
       } else if (nodePath[i + 1] == null) {
         ctx.moveTo(nodePath[i]['x'], nodePath[i]['y']);
         ctx.fillStyle = '#DC143C';
