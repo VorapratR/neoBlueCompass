@@ -26,6 +26,8 @@ export class MapPage implements OnInit, OnDestroy {
   idGoal: string;
   nameGoal: string;
   navigateText: string;
+  arOrder: string[];
+  messagesUnity = '';
   compass: number;
   stepCount: number;
   allLocations: Array<Location> = [];
@@ -101,6 +103,7 @@ export class MapPage implements OnInit, OnDestroy {
         let newArray = [];
         newArray = drawResult[0].concat(drawResult[1]);
         this.generateText(newArray);
+        this.generateARdata(newArray);
       }
     );
   }
@@ -241,6 +244,24 @@ export class MapPage implements OnInit, OnDestroy {
     }
     return '';
   }
+  CalculateCrossProductAR(A: any, B: any, C: any): string {
+    const bx = B.x - A.x;
+    const by = B.y - A.y;
+    const cx = C.x - A.x;
+    const cy = C.y - A.y;
+    const crossProduct = bx * cy - by * cx;
+    // console.log('====> b in cp', B);
+    if (crossProduct > 0) {
+      // console.log(`เลี้ยวขวา${B.name}`);
+      return `R-${B.id},`;
+    } else if (crossProduct < 0) {
+      // console.log(`เลี้ยวซ้าย${B.name}`);
+      return `L-${B.id},`;
+    } else if (crossProduct === 0) {
+      return `N-${B.id},`;
+    }
+    return '';
+  }
 
   generateText(data: any) {
     console.log('data in generateText', data);
@@ -257,7 +278,27 @@ export class MapPage implements OnInit, OnDestroy {
     this.textOrder.pop();
     this.textOrder.push('เดินตรงไป');
     this.textOrder.push('ถึงจุดหมาย');
-    console.log(this.textOrder);
+  }
+  generateARdata(data: any) {
+    let command = '';
+    const firstnode = data[0].id;
+    const lastnode = data.pop().id;
+    for (let i = 0; i < data.length - 2; i++) {
+      const buffer = this.CalculateCrossProductAR(data[i], data[i + 1], data[i + 2]);
+      if (buffer !== '') {
+        command += buffer;
+      }
+    }
+    this.arOrder = command.split(',');
+    this.arOrder.unshift('start-' + firstnode);
+    this.arOrder.push('last-' + lastnode);
+    this.arOrder.forEach(element => {
+      if (element) {
+        element += ',';
+        this.messagesUnity += element;
+      }
+    });
+    console.log(this.messagesUnity);
   }
 
   nextText() {
@@ -308,5 +349,6 @@ export class MapPage implements OnInit, OnDestroy {
   backFeedsPage() {
     this.router.navigateByUrl('/app/tabs/feeds');
   }
+
 
 }
