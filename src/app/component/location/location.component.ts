@@ -14,6 +14,7 @@ export class LocationComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
+    // console.log(this.location);
     if (this.location.id.includes('baramee')) {
       this.location.building = 'อาคารบารมี ';
     } else {
@@ -23,6 +24,7 @@ export class LocationComponent implements OnInit {
 
   goToPlanpage() {
     const data = `/plan/${this.location.id}/${this.location.name}`;
+    console.log(data);
     this.router.navigateByUrl(data);
   }
 

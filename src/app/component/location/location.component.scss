@@ -6,6 +6,7 @@
     --ion-color-shade: var(--ion-color-indigo-shade);
     --ion-color-tint: var(--ion-color-indigo-tint);
 }
+
 .ion-color-sea {
     --ion-color-base: var(--ion-color-sea);
     --ion-color-base-rgb: var(--ion-color-sea-rgb);
@@ -13,7 +14,8 @@
     --ion-color-contrast-rgb: var(--ion-color-sea-contrast-rgb);
     --ion-color-shade: var(--ion-color-sea-shade);
     --ion-color-tint: var(--ion-color-sea-tint);
-  }
+}
+
 ion-card {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -25,4 +27,11 @@ ion-card {
     text-overflow: ellipsis;
 }
 
-
+.ion-color-blue {
+    --ion-color-base: var(--ion-color-blue);
+    --ion-color-base-rgb: var(--ion-color-blue-rgb);
+    --ion-color-contrast: var(--ion-color-blue-contrast);
+    --ion-color-contrast-rgb: var(--ion-color-blue-contrast-rgb);
+    --ion-color-shade: var(--ion-color-blue-shade);
+    --ion-color-tint: var(--ion-color-blue-tint);
+}

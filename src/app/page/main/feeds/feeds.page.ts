@@ -16,17 +16,10 @@ export class FeedsPage implements OnInit, OnDestroy {
   typeShowData = true;
   asub: Subscription;
   constructor(private psuHospitalService: PsuHospitalService) {
-    // console.log('hello');
     this.asub = this.psuHospitalService.loadLocation().subscribe(
       data => {
-        data.locations.forEach((item, index, object) => {
-          if (item.name.includes('')) {
-            object.splice(index, 1);
-          }
-          this.allLocations = data.locations;
-          this.filterLocations = data.locations;
-        });
-        console.log(this.filterLocations);
+        this.allLocations = data.locations;
+        this.filterLocations = data.locations;
       }
     );
   }

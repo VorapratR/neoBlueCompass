@@ -349,6 +349,7 @@ export class MapPage implements OnInit, OnDestroy {
     this.arOrder = command.split(',');
     this.arOrder.unshift('S-' + firstnode);
     this.arOrder.push('E-' + lastnode);
+    // console.log(this.arOrder);
     this.arOrder.forEach(element => {
       if (element) {
         element += ',';
@@ -431,7 +432,7 @@ export class MapPage implements OnInit, OnDestroy {
     console.log('back');
   }
   backFeedsPage() {
-    // this.router.navigateByUrl('/app/tabs/feeds');
-    this.showCostAllPath();
+    this.router.navigateByUrl('/app/tabs/feeds');
+    // this.showCostAllPath();
   }
 }

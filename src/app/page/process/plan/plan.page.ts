@@ -44,7 +44,7 @@ export class PlanPage implements OnInit {
 
   onBeacon() {
     this.showDetail = true;
-    this.typeScan = false
+    this.typeScan = false;
     this.findLocationDetail =
       'เป็นการระบุตำแหน่งโดยการสแกน Bluetooth Low Energy บริเวณที่คุณอยู่กรุณาเปิดbluetooth ขณะใช้งาน';
   }
