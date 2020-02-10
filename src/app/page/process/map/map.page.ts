@@ -27,12 +27,17 @@ export class MapPage implements OnInit, OnDestroy {
   nameGoal: string;
   navigateText: string;
   arOrder: string[];
+  costOrder: string[];
+  costAllPath: number[] = [];
+  costBuffer = '';
   messagesUnity = '';
   compass: number;
   stepCount: number;
+  meterCount: number;
   allLocations: Array<Location> = [];
   bsub: Subscription;
   graph: any = {};
+  graphCost: any = {};
   textOrder: string[] = ['เริ่มต้น'];
   index = 0;
   pathResults: any[][] = [[], []];
@@ -51,10 +56,12 @@ export class MapPage implements OnInit, OnDestroy {
     this.imgPath.push('../../../../assets/maps/main1.png');
     this.canvas = document.createElement('canvas');
     this.color = 'rgb(255,255,255)';
-    this.navigateText = 'มุ่งหน้าไป';
+    this.navigateText = 'สวัสดีครับ.';
     this.stepCount = 0;
+    this.meterCount = 0;
     this.idStart = this.route.snapshot.paramMap.get('start');
     this.idGoal = this.route.snapshot.paramMap.get('end');
+    this.startPedometer();
   }
 
   findPath() {
@@ -90,24 +97,57 @@ export class MapPage implements OnInit, OnDestroy {
                   name: this.allLocations[elem].name
                 };
                 if (this.allLocations[elem].id.includes('baramee1')) {
-                  console.log(true);
+                  // console.log(true);
                   drawResult[0].push(obj);
                 } else if (this.allLocations[elem].id.includes('main1')) {
-                  console.log(false);
+                  // console.log(false);
                   drawResult[1].push(obj);
                 }
-                console.log(drawResult);
+                // console.log(drawResult);
               }});
         });
         this.pathResults = drawResult;
         let newArray = [];
         newArray = drawResult[0].concat(drawResult[1]);
         this.generateText(newArray);
+        this.CostData(newArray);
         this.generateARdata(newArray);
       }
     );
   }
+  findCost(start: string, goal: string) {
+    const nodeDijkstra = require('node-dijkstra');
+    this.psuHospitalService.loadLocation().subscribe(
+      data => {
+        data.locations.forEach( element => {
+          if (element.id === this.idGoal) {
+            this.nameGoal = element.name;
+          }
+        });
+        this.graphCost = {};
+        this.allLocations = data.locations;
+        const results = {};
+        Object.keys(this.allLocations).map(
+          elem => {
+            const pathId = this.allLocations[elem].id;
+            results[pathId] = this.allLocations[elem].neighbor;
+          }
+        );
+        const route = new nodeDijkstra(results);
+        this.graphCost = route.path(start, goal, { cost: true });
+        console.log(`Cost ${start}-${goal} : ${this.graphCost.cost} `);
+        this.addCostAllPath(this.graphCost.cost);
+      }
+    );
+  }
 
+  addCostAllPath(data: any) {
+    console.log(data);
+    this.costAllPath.push(data);
+  }
+  showCostAllPath() {
+    console.log(this.costAllPath);
+  }
   ngOnInit() {
     this.textOrder = ['เริ่มต้น'];
     this.index = 0;
@@ -222,6 +262,9 @@ export class MapPage implements OnInit, OnDestroy {
         this.pedometerData = PedometerData;
         this.ngZoneCtrl.run(() => {
           this.stepCount = this.pedometerData.numberOfSteps;
+          if (this.stepCount > 1 ) {
+            this.meterCount = this.stepCount * 0.76;
+          }
         });
       });
     }
@@ -253,12 +296,28 @@ export class MapPage implements OnInit, OnDestroy {
     // console.log('====> b in cp', B);
     if (crossProduct > 0) {
       // console.log(`เลี้ยวขวา${B.name}`);
-      return `R-${B.id},`;
+      return `\nR-${B.id}`;
     } else if (crossProduct < 0) {
       // console.log(`เลี้ยวซ้าย${B.name}`);
-      return `L-${B.id},`;
+      return `\nL-${B.id}`;
     } else if (crossProduct === 0) {
-      return `N-${B.id},`;
+      return `N-${B.id}`;
+    }
+    return '';
+  }
+  CalculateCrossProductID(A: any, B: any, C: any): string {
+    const bx = B.x - A.x;
+    const by = B.y - A.y;
+    const cx = C.x - A.x;
+    const cy = C.y - A.y;
+    const crossProduct = bx * cy - by * cx;
+    // console.log('====> b in cp', B);
+    if (crossProduct > 0) {
+      // console.log(`เลี้ยวขวา${B.name}`);
+      return `${B.id}`;
+    } else if (crossProduct < 0) {
+      // console.log(`เลี้ยวซ้าย${B.name}`);
+      return `${B.id}`;
     }
     return '';
   }
@@ -290,8 +349,8 @@ export class MapPage implements OnInit, OnDestroy {
       }
     }
     this.arOrder = command.split(',');
-    this.arOrder.unshift('start-' + firstnode);
-    this.arOrder.push('last-' + lastnode);
+    this.arOrder.unshift('S-' + firstnode);
+    this.arOrder.push('E-' + lastnode);
     this.arOrder.forEach(element => {
       if (element) {
         element += ',';
@@ -299,6 +358,32 @@ export class MapPage implements OnInit, OnDestroy {
       }
     });
     console.log(this.messagesUnity);
+  }
+
+  CostData(data: any) { // data =  path node ทั้งหมด
+    let command = '';
+    const firstnode = data[0].id;
+    const lastnode = data.pop().id;
+    for (let i = 0; i < data.length - 2; i++) {
+      const buffer = this.CalculateCrossProductID(data[i], data[i + 1], data[i + 2]);
+      if (buffer !== '') {
+        command += buffer;
+      }
+    }
+    this.costOrder = command.split(',');
+    this.costOrder.unshift(firstnode);
+    this.costOrder.push(lastnode);
+    this.costOrder.forEach(ele => {
+      if (ele) {
+        ele += ',';
+        this.costBuffer += ele;
+      }
+    });
+    const dataPath = this.costBuffer.split(',');
+    dataPath.pop();
+    for (let i = 0; i < Object.keys(dataPath).length - 1; i++) {
+      this.findCost(dataPath[i], dataPath[i + 1]);
+    }
   }
 
   nextText() {
@@ -347,7 +432,8 @@ export class MapPage implements OnInit, OnDestroy {
     console.log('back');
   }
   backFeedsPage() {
-    this.router.navigateByUrl('/app/tabs/feeds');
+    // this.router.navigateByUrl('/app/tabs/feeds');
+    this.showCostAllPath();
   }
 
 

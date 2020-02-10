@@ -15,6 +15,8 @@
     --ion-color-tint: var(--ion-color-sea-tint);
   }
 ion-card {
+    overflow: hidden;
+    text-overflow: ellipsis;
     border-radius: 20px;
 }
 
@@ -22,4 +24,5 @@ ion-card {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 

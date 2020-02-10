@@ -19,8 +19,7 @@
         <img src="../../../../assets/compass.svg">
       </ion-avatar>
       <ion-label>
-        <h1><b> {{nameGoal || 'ไม่พบข้อมูล'}} </b></h1>
-        <h2> ID: {{idGoal || 'ไม่พบข้อมูล'}} </h2>
+        <h1 text-wrap><b> {{nameGoal || 'ไม่พบข้อมูล'}} </b></h1>
       </ion-label>
       <ion-button *ngIf="!idGoal" size="large" color="danger" (click)="backBeforePage()">X</ion-button>
     </ion-item>
