@@ -9,6 +9,8 @@ import { Platform } from '@ionic/angular';
 import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
 import { element } from 'protractor';
 import { SSL_OP_CRYPTOPRO_TLSEXT_BUG } from 'constants';
+import { async } from '@angular/core/testing';
+import { __await } from 'tslib';
 declare let unityARCaller: any;
 
 @Component({
@@ -64,10 +66,10 @@ export class MapPage implements OnInit, OnDestroy {
     this.startPedometer();
   }
 
-  findPath() {
+  async findPath() {
     const nodeDijkstra = require('node-dijkstra');
     this.bsub = this.psuHospitalService.loadLocation().subscribe(
-      data => {
+      async data => {
         data.locations.forEach( element => {
           if (element.id === this.idGoal) {
             this.nameGoal = element.name;
@@ -103,18 +105,18 @@ export class MapPage implements OnInit, OnDestroy {
                   // console.log(false);
                   drawResult[1].push(obj);
                 }
-                // console.log(drawResult);
               }});
         });
         this.pathResults = drawResult;
-        let newArray = [];
-        newArray = drawResult[0].concat(drawResult[1]);
-        this.generateText(newArray);
-        this.CostData(newArray);
-        this.generateARdata(newArray);
+        const sumResult = await this.pathResults[0].concat(this.pathResults[1]);
+        this.generateARdata(sumResult);
+        this.generateText(sumResult);
+        // costData ส่งข้อมูลไปไม่ครบ
+        // this.CostData(sumResult);
       }
     );
   }
+
   findCost(start: string, goal: string) {
     const nodeDijkstra = require('node-dijkstra');
     this.psuHospitalService.loadLocation().subscribe(
@@ -140,7 +142,6 @@ export class MapPage implements OnInit, OnDestroy {
       }
     );
   }
-
   addCostAllPath(data: any) {
     console.log(data);
     this.costAllPath.push(data);
@@ -205,21 +206,18 @@ export class MapPage implements OnInit, OnDestroy {
     ctx.strokeStyle = '#00BFFF';
     ctx.setLineDash([20, 5]);
     ctx.lineWidth = 15;
+
     for (let i = 0; i < nodePath.length; i++) {
-      if (i === 0 && i + 1 != null) {
-        ctx.moveTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
+      if (i === 0 && nodePath[i + 1]) {
         ctx.fillStyle = '#DC143C';
-        ctx.fillRect(nodePath[i + 1]['x'] - 10, nodePath[i + 1]['y'], 20, 20);
-      } else if (i === 0 && i + 1 === null) {
-        ctx.moveTo(nodePath[i]['x'], nodePath[i]['y']);
+        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
+        ctx.moveTo(nodePath[i]['x'], nodePath[i]['y'])
+        ctx.lineTo(nodePath[i+1]['x'], nodePath[i+1]['y'])
+      } else if (!nodePath[i + 1]) {
         ctx.fillStyle = '#DC143C';
-        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'] - 20, 20, 20);
-      } else if (nodePath[i + 1] == null) {
-        ctx.moveTo(nodePath[i]['x'], nodePath[i]['y']);
-        ctx.fillStyle = '#DC143C';
-        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'] - 20, 20, 20);
-      } else if (nodePath[i + 1] != null) {
-        ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
+        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
+      } else {
+        ctx.lineTo(nodePath[i+1]['x'], nodePath[i+1]['y'])
       }
     }
     ctx.fillStyle = '#DC143C';
@@ -268,7 +266,6 @@ export class MapPage implements OnInit, OnDestroy {
         });
       });
     }
-
   }
 
   CalculateCrossProduct(A: any, B: any, C: any): string {
@@ -323,7 +320,6 @@ export class MapPage implements OnInit, OnDestroy {
   }
 
   generateText(data: any) {
-    console.log('data in generateText', data);
     let command = 'เดินตรงไปแล้ว';
     for (let i = 0; i < data.length - 2; i++) {
       const buffer = this.CalculateCrossProduct(data[i], data[i + 1], data[i + 2]);
@@ -338,7 +334,9 @@ export class MapPage implements OnInit, OnDestroy {
     this.textOrder.push('เดินตรงไป');
     this.textOrder.push('ถึงจุดหมาย');
   }
+
   generateARdata(data: any) {
+    console.table(data);
     let command = '';
     const firstnode = data[0].id;
     const lastnode = data.pop().id;
@@ -361,6 +359,7 @@ export class MapPage implements OnInit, OnDestroy {
   }
 
   CostData(data: any) { // data =  path node ทั้งหมด
+    console.table(data);
     let command = '';
     const firstnode = data[0].id;
     const lastnode = data.pop().id;
@@ -406,7 +405,7 @@ export class MapPage implements OnInit, OnDestroy {
 
   openUnity() {
   // It is possible to send a string message to Unity-side (optional)
-    unityARCaller.launchAR( 'my message for Unity-side', this.uReturnedFromUnity, this.uMessageReceivedFromUnity );
+    unityARCaller.launchAR( this.messagesUnity, this.uReturnedFromUnity, this.uMessageReceivedFromUnity );
   }
 
   sendMessageToUnity() {
@@ -435,6 +434,4 @@ export class MapPage implements OnInit, OnDestroy {
     // this.router.navigateByUrl('/app/tabs/feeds');
     this.showCostAllPath();
   }
-
-
 }
