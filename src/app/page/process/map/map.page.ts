@@ -293,12 +293,12 @@ export class MapPage implements OnInit, OnDestroy {
     // console.log('====> b in cp', B);
     if (crossProduct > 0) {
       // console.log(`เลี้ยวขวา${B.name}`);
-      return `\nR-${B.id}`;
+      return `R-${B.id},`;
     } else if (crossProduct < 0) {
       // console.log(`เลี้ยวซ้าย${B.name}`);
-      return `\nL-${B.id}`;
+      return `L-${B.id},`;
     } else if (crossProduct === 0) {
-      return `N-${B.id}`;
+      return `N-${B.id},`;
     }
     return '';
   }
@@ -333,23 +333,24 @@ export class MapPage implements OnInit, OnDestroy {
     this.textOrder.pop();
     this.textOrder.push('เดินตรงไป');
     this.textOrder.push('ถึงจุดหมาย');
+    console.log(this.textOrder);
   }
 
   generateARdata(data: any) {
     console.table(data);
     let command = '';
-    const firstnode = data[0].id;
-    const lastnode = data.pop().id;
     for (let i = 0; i < data.length - 2; i++) {
       const buffer = this.CalculateCrossProductAR(data[i], data[i + 1], data[i + 2]);
       if (buffer !== '') {
+        console.log(command);
         command += buffer;
       }
     }
+    const firstnode = data[0].id;
+    const lastnode = data.pop().id;
     this.arOrder = command.split(',');
     this.arOrder.unshift('S-' + firstnode);
     this.arOrder.push('E-' + lastnode);
-    // console.log(this.arOrder);
     this.arOrder.forEach(element => {
       if (element) {
         element += ',';
