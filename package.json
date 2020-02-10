@@ -35,7 +35,6 @@
     "cordova-plugin-device-orientation": "^2.0.1",
     "cordova-plugin-pedometer": "^0.4.1",
     "cordova-plugin-tts": "^0.2.3",
-    "cordova-sqlite-storage": "^4.0.0",
     "core-js": "^2.5.4",
     "ngx-pinch-zoom": "^2.3.4",
     "node-dijkstra": "^2.5.0",
@@ -84,7 +83,6 @@
       "phonegap-plugin-barcodescanner": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
-      "cordova-sqlite-storage": {},
       "cordova-plugin-tts": {},
       "cordova-plugin-device-orientation": {},
       "cordova-plugin-pedometer": {},
