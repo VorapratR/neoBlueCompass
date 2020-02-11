@@ -20,10 +20,12 @@
       </ion-button>
     </ion-item>
     <ion-row>
-      <ion-col *ngFor="let location of filterLocations;let i = index; ">
-        <app-location *ngIf="location" [location]="location" [index]="i" [typeShowData]="typeShowData">
-        </app-location>
-      </ion-col>
+      <div *ngIf="true">
+        <ion-col *ngFor="let location of filterLocations;let i = index;">
+          <app-location *ngIf="location" [location]="location" [index]="i" [typeShowData]="typeShowData">
+          </app-location>
+        </ion-col>
+      </div>
     </ion-row>
   </ion-list>
 </ion-content>

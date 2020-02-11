@@ -197,7 +197,6 @@ export class MapPage implements OnInit, OnDestroy {
     const dataURL = this.canvas.toDataURL('image/png');
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
-
   // nodePath เป็น array ของ pathResults ที่ใช้ในการสร้าง map
   drawLine(ctx: any, img: HTMLImageElement, nodePath: Object[]) {
     ctx.drawImage(img, 0, 0);
@@ -223,26 +222,41 @@ export class MapPage implements OnInit, OnDestroy {
     ctx.stroke();
   }
 
-  getCompass() {
-    setInterval(() => {
-      console.log('test');
-      this.deviceOrientation.getCurrentHeading().then(
-        (data: DeviceOrientationCompassHeading) => {
-          this.compass = data.magneticHeading;
-        },
-        (error: any) => console.log(error)
-      );
-    }, 1000);
-    if (this.compass === 0 || this.compass === 360) {
-      console.log('เหนือ');
-    } else if (this.compass === 90) {
-      console.log('ออก');
-    } else if (this.compass === 180) {
-      console.log('ใต้');
-    } else if (this.compass === 270) {
-      console.log('ตก');
-    }
-  }
+
+      // if (i === 0 && i + 1 != null) {
+      //   ctx.moveTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
+      //   ctx.fillStyle = '#f542e0'; // เริ่มต้น
+      //   ctx.fillRect(nodePath[i + 1]['x'] - 10, nodePath[i + 1]['y'], 20, 20);
+      // } else if (i === 0 && i + 1 === null) {
+      //   ctx.moveTo(nodePath[i]['x'], nodePath[i]['y']);
+      //   ctx.fillStyle = '#81f542';
+      //   ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'] - 20, 20, 20);
+      // } else if (nodePath[i + 1] == null) {
+      //   ctx.moveTo(nodePath[i]['x'], nodePath[i]['y']);
+      //   ctx.fillStyle = '#9a38f5'; // จบ
+      //   ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'] - 20, 20, 20);
+      // } else if (nodePath[i + 1] != null) {
+      //   ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
+  // getCompass() {
+  //   setInterval(() => {
+  //     console.log('test');
+  //     this.deviceOrientation.getCurrentHeading().then(
+  //       (data: DeviceOrientationCompassHeading) => {
+  //         this.compass = data.magneticHeading;
+  //       },
+  //       (error: any) => console.log(error)
+  //     );
+  //   }, 1000);
+  //   if (this.compass === 0 || this.compass === 360) {
+  //     console.log('เหนือ');
+  //   } else if (this.compass === 90) {
+  //     console.log('ออก');
+  //   } else if (this.compass === 180) {
+  //     console.log('ใต้');
+  //   } else if (this.compass === 270) {
+  //     console.log('ตก');
+  //   }
+  // }
 
   textToSpeech() {
     this.tts.speak({

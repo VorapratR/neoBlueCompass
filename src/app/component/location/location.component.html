@@ -4,7 +4,7 @@
         <img src="../../../assets/icon/compass-with-white-needles.svg" color="indigo">
       </ion-avatar>
       <ion-label>
-        <h1 class="wrap-text"><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
+        <h1 text-wrap><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
         <h2 *ngIf="location.building">ตึก:{{location.building}} ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</h2>
       </ion-label>
     </ion-item>
@@ -13,17 +13,26 @@
         <img src="../../../assets/icon/compass-with-white-needles.svg">
       </ion-avatar>
       <ion-label>
-        <h1 class="wrap-text"><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
+        <h1 text-wrap><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
         <h2 *ngIf="location.building">ตึก:{{location.building}}ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</h2>
       </ion-label>
     </ion-item>
 </ion-grid>
 
-<ion-card *ngIf="typeShowData" color="primary"  (click)="goToPlanpage()">
+<!-- <ion-card *ngIf="typeShowData" color="primary"  (click)="goToPlanpage()">
   <img src="../../../assets/icon/compass-with-white-needles.svg" style="margin-left: auto;margin-right: auto;display: block;width: 50%;margin-top: 7%;"/>
   <ion-card-header>
     <ion-card-subtitle text-center class="ion-padding">
-        {{location.name ||'ไม่มีพบข้อมูล'}}
+        <h1> {{location.name ||'ไม่มีพบข้อมูล'}} </h1>
     </ion-card-subtitle>
+  </ion-card-header>
+</ion-card> -->
+
+<ion-card *ngIf="typeShowData" color="primary"  (click)="goToPlanpage()">
+  <img *ngIf="imagePath" src={{imagePath}} style="margin-left: auto;margin-right: auto;display: block;width: 40%;margin-top: 7%;"/>
+  <img *ngIf="!imagePath" src={{defaulfImage}} style="margin-left: auto;margin-right: auto;display: block;width: 40%;margin-top: 7%;"/>
+  <ion-card-header>
+    <ion-card-title *ngIf="location.building">ตึก: {{location.building}} | ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</ion-card-title>
+    <h1 style="margin-top: 0%;">{{location.name ||'ไม่มีพบข้อมูล'}}</h1>
   </ion-card-header>
 </ion-card>
