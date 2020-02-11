@@ -108,9 +108,8 @@ export class MapPage implements OnInit, OnDestroy {
               }});
         });
         this.pathResults = drawResult;
-        const sumResult = await this.pathResults[0].concat(this.pathResults[1]);
-        this.generateARdata(sumResult);
-        this.generateText(sumResult);
+        this.generateARdata(this.pathResults[0].concat(this.pathResults[1]));
+        this.generateText(this.pathResults[0].concat(this.pathResults[1]));
         // costData ส่งข้อมูลไปไม่ครบ
         // this.CostData(sumResult);
       }
@@ -321,6 +320,7 @@ export class MapPage implements OnInit, OnDestroy {
 
   generateText(data: any) {
     let command = 'เดินตรงไปแล้ว';
+    console.table(data);
     for (let i = 0; i < data.length - 2; i++) {
       const buffer = this.CalculateCrossProduct(data[i], data[i + 1], data[i + 2]);
       if (buffer !== '') {
@@ -342,7 +342,6 @@ export class MapPage implements OnInit, OnDestroy {
     for (let i = 0; i < data.length - 2; i++) {
       const buffer = this.CalculateCrossProductAR(data[i], data[i + 1], data[i + 2]);
       if (buffer !== '') {
-        console.log(command);
         command += buffer;
       }
     }
@@ -357,7 +356,7 @@ export class MapPage implements OnInit, OnDestroy {
         this.messagesUnity += element;
       }
     });
-    console.log(this.messagesUnity);
+    // console.log(this.messagesUnity);
   }
 
   CostData(data: any) { // data =  path node ทั้งหมด
