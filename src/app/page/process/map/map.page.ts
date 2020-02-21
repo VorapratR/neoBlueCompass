@@ -70,7 +70,7 @@ export class MapPage implements OnInit, OnDestroy {
     const nodeDijkstra = require('node-dijkstra');
     this.bsub = this.psuHospitalService.loadLocation().subscribe(
       async data => {
-        data.locations.forEach( element => {
+        data.locations.forEach(element => {
           if (element.id === this.idGoal) {
             this.nameGoal = element.name;
           }
@@ -86,354 +86,369 @@ export class MapPage implements OnInit, OnDestroy {
         );
         const route = new nodeDijkstra(results);
         this.graph = route.path(this.idStart, this.idGoal, { cost: true });
-        const drawResult = [[], []];
-        this.graph.path.forEach(element => {
-          Object.keys(this.allLocations).map(
-            elem => {
-              let obj = {};
-              if (element === this.allLocations[elem].id) {
-                obj = {
-                  id: this.allLocations[elem].id,
-                  x: this.allLocations[elem].x,
-                  y: this.allLocations[elem].y,
-                  name: this.allLocations[elem].name
-                };
-                if (this.allLocations[elem].id.includes('baramee1')) {
-                  // console.log(true);
-                  drawResult[0].push(obj);
-                } else if (this.allLocations[elem].id.includes('main1')) {
-                  // console.log(false);
-                  drawResult[1].push(obj);
+        console.log(this.graph);
+        const drawResult = [];
+        let buildingPath = {};
+        let tmpObj = {};
+        let buildings = [];
+        if (this.graph) {
+          this.graph.path.forEach(path => {
+            if (!buildings.includes(path.split('_')[0])) {
+              buildings.push(path.split('_')[0]);
+            }
+          });
+        }
+        console.log(buildings);
+        for (let building of buildings) {
+          let tmpArray = [];
+          console.log(building);
+          this.graph.path.forEach(element => {
+            Object.keys(this.allLocations).map(
+              elem => {
+                let obj = {};
+                if (element === this.allLocations[elem].id) {
+                  obj = {
+                    id: this.allLocations[elem].id,
+                    x: this.allLocations[elem].x,
+                    y: this.allLocations[elem].y,
+                    name: this.allLocations[elem].name
+                  };
+                  if (obj['id'].includes(building)) {
+                    tmpArray.push(obj);
+                  }
                 }
-              }});
-        });
-        this.pathResults = drawResult;
-        this.generateARdata(this.pathResults[0].concat(this.pathResults[1]));
-        this.generateText(this.pathResults[0].concat(this.pathResults[1]));
-        // costData ส่งข้อมูลไปไม่ครบ
-        // this.CostData(sumResult);
-      }
-    );
-  }
-
-  findCost(start: string, goal: string) {
-    const nodeDijkstra = require('node-dijkstra');
-    this.psuHospitalService.loadLocation().subscribe(
-      data => {
-        data.locations.forEach( element => {
-          if (element.id === this.idGoal) {
-            this.nameGoal = element.name;
-          }
-        });
-        this.graphCost = {};
-        this.allLocations = data.locations;
-        const results = {};
-        Object.keys(this.allLocations).map(
-          elem => {
-            const pathId = this.allLocations[elem].id;
-            results[pathId] = this.allLocations[elem].neighbor;
-          }
-        );
-        const route = new nodeDijkstra(results);
-        this.graphCost = route.path(start, goal, { cost: true });
-        console.log(`Cost ${start}-${goal} : ${this.graphCost.cost} `);
-        this.addCostAllPath(this.graphCost.cost);
-      }
-    );
-  }
-  addCostAllPath(data: any) {
-    console.log(data);
-    this.costAllPath.push(data);
-  }
-  showCostAllPath() {
-    console.log(this.costAllPath);
-  }
-  ngOnInit() {
-    this.textOrder = ['เริ่มต้น'];
-    this.index = 0;
-    this.pathResults = [[], []];
-    this.findPath();
-    // tslint:disable-next-line: no-shadowed-variable
-    this.imgPath.forEach(element => {
-      this.getBase64ImageFromURL(element).subscribe(data => {
-        this.imgCanvas.push('data:image/jpg;base64,' + data);
+              });
+          });
+          console.log(tmpArray);
+          tmpObj[building] = tmpArray;
+        }
+        console.log(tmpObj);
       });
+    // this.pathResults = drawResult;
+    // this.generateARdata(this.pathResults[0].concat(this.pathResults[1]));
+    // this.generateText(this.pathResults[0].concat(this.pathResults[1]));
+    // costData ส่งข้อมูลไปไม่ครบ
+    // this.CostData(sumResult);
+  }
+
+findCost(start: string, goal: string) {
+  const nodeDijkstra = require('node-dijkstra');
+  this.psuHospitalService.loadLocation().subscribe(
+    data => {
+      data.locations.forEach(element => {
+        if (element.id === this.idGoal) {
+          this.nameGoal = element.name;
+        }
+      });
+      this.graphCost = {};
+      this.allLocations = data.locations;
+      const results = {};
+      Object.keys(this.allLocations).map(
+        elem => {
+          const pathId = this.allLocations[elem].id;
+          results[pathId] = this.allLocations[elem].neighbor;
+        }
+      );
+      const route = new nodeDijkstra(results);
+      this.graphCost = route.path(start, goal, { cost: true });
+      console.log(`Cost ${start}-${goal} : ${this.graphCost.cost} `);
+      this.addCostAllPath(this.graphCost.cost);
+    }
+  );
+}
+addCostAllPath(data: any) {
+  console.log(data);
+  this.costAllPath.push(data);
+}
+showCostAllPath() {
+  console.log(this.costAllPath);
+}
+ngOnInit() {
+  this.textOrder = ['เริ่มต้น'];
+  this.index = 0;
+  this.pathResults = [[], []];
+  this.findPath();
+  // tslint:disable-next-line: no-shadowed-variable
+  this.imgPath.forEach(element => {
+    this.getBase64ImageFromURL(element).subscribe(data => {
+      this.imgCanvas.push('data:image/jpg;base64,' + data);
     });
-  }
+  });
+}
 
-  ngOnDestroy() {
-    this.bsub.unsubscribe();
-  }
+ngOnDestroy() {
+  this.bsub.unsubscribe();
+}
 
-  getBase64ImageFromURL(url: string) {
-    return Observable.create((observer: Observer<string>) => {
-      const img = new Image();
-      img.crossOrigin = 'Anonymous';
-      img.src = url;
-      if (!img.complete) {
-        img.onload = () => {
-          observer.next(this.getBase64Image(img));
-          observer.complete();
-        };
-        img.onerror = (err) => {
-          observer.error(err);
-        };
-      } else {
+getBase64ImageFromURL(url: string) {
+  return Observable.create((observer: Observer<string>) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = url;
+    if (!img.complete) {
+      img.onload = () => {
         observer.next(this.getBase64Image(img));
         observer.complete();
-      }
-    });
-  }
-
-  getBase64Image(img: HTMLImageElement) {
-    this.canvas.width = img.width;
-    this.canvas.height = img.height;
-    if (img.src.includes('baramee1')) {
-      this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[0]);
+      };
+      img.onerror = (err) => {
+        observer.error(err);
+      };
+    } else {
+      observer.next(this.getBase64Image(img));
+      observer.complete();
     }
-    if (img.src.includes('main1')) {
-      this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[1]);
-    }
-    const dataURL = this.canvas.toDataURL('image/png');
-    return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
-  }
-  // nodePath เป็น array ของ pathResults ที่ใช้ในการสร้าง map
-  drawLine(ctx: any, img: HTMLImageElement, nodePath: Object[]) {
-    ctx.drawImage(img, 0, 0);
-    ctx.beginPath();
-    ctx.strokeStyle = '#00BFFF';
-    ctx.setLineDash([20, 5]);
-    ctx.lineWidth = 15;
+  });
+}
 
-    for (let i = 0; i < nodePath.length; i++) {
-      if (i === 0 && nodePath[i + 1]) {
-        ctx.fillStyle = '#f542e0';
-        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
-        ctx.moveTo(nodePath[i]['x'], nodePath[i]['y'])
-        ctx.lineTo(nodePath[i+1]['x'], nodePath[i+1]['y'])
-      } else if (!nodePath[i + 1]) {
-        if (this.pathResults[1] !== []) {
-          ctx.fillStyle = '#00BFFF';
-        } else {
-          ctx.fillStyle = '#9a38f5';
-        }
-        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
+getBase64Image(img: HTMLImageElement) {
+  this.canvas.width = img.width;
+  this.canvas.height = img.height;
+  if (img.src.includes('baramee1')) {
+    this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[0]);
+  }
+  if (img.src.includes('main1')) {
+    this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[1]);
+  }
+  const dataURL = this.canvas.toDataURL('image/png');
+  return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
+}
+// nodePath เป็น array ของ pathResults ที่ใช้ในการสร้าง map
+drawLine(ctx: any, img: HTMLImageElement, nodePath: Object[]) {
+  ctx.drawImage(img, 0, 0);
+  ctx.beginPath();
+  ctx.strokeStyle = '#00BFFF';
+  ctx.setLineDash([20, 5]);
+  ctx.lineWidth = 15;
+
+  for (let i = 0; i < nodePath.length; i++) {
+    if (i === 0 && nodePath[i + 1]) {
+      ctx.fillStyle = '#f542e0';
+      ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
+      ctx.moveTo(nodePath[i]['x'], nodePath[i]['y'])
+      ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y'])
+    } else if (!nodePath[i + 1]) {
+      if (this.pathResults[1] !== []) {
+        ctx.fillStyle = '#00BFFF';
       } else {
-        ctx.lineTo(nodePath[i+1]['x'], nodePath[i+1]['y'])
+        ctx.fillStyle = '#9a38f5';
       }
+      ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
+    } else {
+      ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y'])
     }
-    ctx.stroke();
   }
-  // getCompass() {
-  //   setInterval(() => {
-  //     console.log('test');
-  //     this.deviceOrientation.getCurrentHeading().then(
-  //       (data: DeviceOrientationCompassHeading) => {
-  //         this.compass = data.magneticHeading;
-  //       },
-  //       (error: any) => console.log(error)
-  //     );
-  //   }, 1000);
-  //   if (this.compass === 0 || this.compass === 360) {
-  //     console.log('เหนือ');
-  //   } else if (this.compass === 90) {
-  //     console.log('ออก');
-  //   } else if (this.compass === 180) {
-  //     console.log('ใต้');
-  //   } else if (this.compass === 270) {
-  //     console.log('ตก');
-  //   }
-  // }
+  ctx.stroke();
+}
+// getCompass() {
+//   setInterval(() => {
+//     console.log('test');
+//     this.deviceOrientation.getCurrentHeading().then(
+//       (data: DeviceOrientationCompassHeading) => {
+//         this.compass = data.magneticHeading;
+//       },
+//       (error: any) => console.log(error)
+//     );
+//   }, 1000);
+//   if (this.compass === 0 || this.compass === 360) {
+//     console.log('เหนือ');
+//   } else if (this.compass === 90) {
+//     console.log('ออก');
+//   } else if (this.compass === 180) {
+//     console.log('ใต้');
+//   } else if (this.compass === 270) {
+//     console.log('ตก');
+//   }
+// }
 
-  textToSpeech() {
-    this.tts.speak({
-      text: this.navigateText,
-      locale: 'th-TH',
-      rate: 1
-    }).then(() => console.log('Success'))
-      .catch((reason: any) => console.log(reason));
-  }
+textToSpeech() {
+  this.tts.speak({
+    text: this.navigateText,
+    locale: 'th-TH',
+    rate: 1
+  }).then(() => console.log('Success'))
+    .catch((reason: any) => console.log(reason));
+}
 
-  startPedometer() {
-    if (this.platform.is('cordova')) {
-      this.pedoCtrl.startPedometerUpdates().subscribe((PedometerData) => {
-        this.pedometerData = PedometerData;
-        this.ngZoneCtrl.run(() => {
-          this.stepCount = this.pedometerData.numberOfSteps;
-          if (this.stepCount > 1 ) {
-            this.meterCount = this.stepCount * 0.76;
-          }
-        });
+startPedometer() {
+  if (this.platform.is('cordova')) {
+    this.pedoCtrl.startPedometerUpdates().subscribe((PedometerData) => {
+      this.pedometerData = PedometerData;
+      this.ngZoneCtrl.run(() => {
+        this.stepCount = this.pedometerData.numberOfSteps;
+        if (this.stepCount > 1) {
+          this.meterCount = this.stepCount * 0.76;
+        }
       });
-    }
-  }
-
-  CalculateCrossProduct(A: any, B: any, C: any): string {
-    const bx = B.x - A.x;
-    const by = B.y - A.y;
-    const cx = C.x - A.x;
-    const cy = C.y - A.y;
-    const crossProduct = bx * cy - by * cx;
-    // console.log('====> b in cp', B);
-    if (crossProduct > 0) {
-      // console.log(`เลี้ยวขวา${B.name}`);
-      return `เลี้ยวขวาที่${B.name},`;
-    } else if (crossProduct < 0) {
-      // console.log(`เลี้ยวซ้าย${B.name}`);
-      return `เลี้ยวซ้ายที่${B.name},`;
-    }
-    return '';
-  }
-  CalculateCrossProductAR(A: any, B: any, C: any): string {
-    const bx = B.x - A.x;
-    const by = B.y - A.y;
-    const cx = C.x - A.x;
-    const cy = C.y - A.y;
-    const crossProduct = bx * cy - by * cx;
-    // console.log('====> b in cp', B);
-    if (crossProduct > 0) {
-      // console.log(`เลี้ยวขวา${B.name}`);
-      return `R-${B.id},`;
-    } else if (crossProduct < 0) {
-      // console.log(`เลี้ยวซ้าย${B.name}`);
-      return `L-${B.id},`;
-    } else if (crossProduct === 0) {
-      return `N-${B.id},`;
-    }
-    return '';
-  }
-  CalculateCrossProductID(A: any, B: any, C: any): string {
-    const bx = B.x - A.x;
-    const by = B.y - A.y;
-    const cx = C.x - A.x;
-    const cy = C.y - A.y;
-    const crossProduct = bx * cy - by * cx;
-    // console.log('====> b in cp', B);
-    if (crossProduct > 0) {
-      // console.log(`เลี้ยวขวา${B.name}`);
-      return `${B.id}`;
-    } else if (crossProduct < 0) {
-      // console.log(`เลี้ยวซ้าย${B.name}`);
-      return `${B.id}`;
-    }
-    return '';
-  }
-
-  generateText(data: any) {
-    let command = 'เดินตรงไปแล้ว';
-    console.table(data);
-    for (let i = 0; i < data.length - 2; i++) {
-      const buffer = this.CalculateCrossProduct(data[i], data[i + 1], data[i + 2]);
-      if (buffer !== '') {
-        command += buffer;
-        command += 'จากนั้นมุ่งหน้าต่อไปแล้ว';
-      }
-    }
-    this.textOrder = command.split(',');
-    this.textOrder.unshift('เริ่มต้น');
-    this.textOrder.pop();
-    this.textOrder.push('เดินตรงไป');
-    this.textOrder.push('ถึงจุดหมาย');
-    console.log(this.textOrder);
-  }
-
-  generateARdata(data: any) {
-    console.table(data);
-    let command = '';
-    for (let i = 0; i < data.length - 2; i++) {
-      const buffer = this.CalculateCrossProductAR(data[i], data[i + 1], data[i + 2]);
-      if (buffer !== '') {
-        command += buffer;
-      }
-    }
-    const firstnode = data[0].id;
-    const lastnode = data.pop().id;
-    this.arOrder = command.split(',');
-    this.arOrder.unshift('S-' + firstnode);
-    this.arOrder.push('E-' + lastnode);
-    this.arOrder.forEach(element => {
-      if (element) {
-        element += ',';
-        this.messagesUnity += element;
-      }
     });
-    // console.log(this.messagesUnity);
   }
+}
 
-  CostData(data: any) { // data =  path node ทั้งหมด
-    console.table(data);
-    let command = '';
-    const firstnode = data[0].id;
-    const lastnode = data.pop().id;
-    for (let i = 0; i < data.length - 2; i++) {
-      const buffer = this.CalculateCrossProductID(data[i], data[i + 1], data[i + 2]);
-      if (buffer !== '') {
-        command += buffer;
-      }
-    }
-    this.costOrder = command.split(',');
-    this.costOrder.unshift(firstnode);
-    this.costOrder.push(lastnode);
-    this.costOrder.forEach(ele => {
-      if (ele) {
-        ele += ',';
-        this.costBuffer += ele;
-      }
-    });
-    const dataPath = this.costBuffer.split(',');
-    dataPath.pop();
-    for (let i = 0; i < Object.keys(dataPath).length - 1; i++) {
-      this.findCost(dataPath[i], dataPath[i + 1]);
+CalculateCrossProduct(A: any, B: any, C: any): string {
+  const bx = B.x - A.x;
+  const by = B.y - A.y;
+  const cx = C.x - A.x;
+  const cy = C.y - A.y;
+  const crossProduct = bx * cy - by * cx;
+  // console.log('====> b in cp', B);
+  if (crossProduct > 0) {
+    // console.log(`เลี้ยวขวา${B.name}`);
+    return `เลี้ยวขวาที่${B.name},`;
+  } else if (crossProduct < 0) {
+    // console.log(`เลี้ยวซ้าย${B.name}`);
+    return `เลี้ยวซ้ายที่${B.name},`;
+  }
+  return '';
+}
+CalculateCrossProductAR(A: any, B: any, C: any): string {
+  const bx = B.x - A.x;
+  const by = B.y - A.y;
+  const cx = C.x - A.x;
+  const cy = C.y - A.y;
+  const crossProduct = bx * cy - by * cx;
+  // console.log('====> b in cp', B);
+  if (crossProduct > 0) {
+    // console.log(`เลี้ยวขวา${B.name}`);
+    return `R-${B.id},`;
+  } else if (crossProduct < 0) {
+    // console.log(`เลี้ยวซ้าย${B.name}`);
+    return `L-${B.id},`;
+  } else if (crossProduct === 0) {
+    return `N-${B.id},`;
+  }
+  return '';
+}
+CalculateCrossProductID(A: any, B: any, C: any): string {
+  const bx = B.x - A.x;
+  const by = B.y - A.y;
+  const cx = C.x - A.x;
+  const cy = C.y - A.y;
+  const crossProduct = bx * cy - by * cx;
+  // console.log('====> b in cp', B);
+  if (crossProduct > 0) {
+    // console.log(`เลี้ยวขวา${B.name}`);
+    return `${B.id}`;
+  } else if (crossProduct < 0) {
+    // console.log(`เลี้ยวซ้าย${B.name}`);
+    return `${B.id}`;
+  }
+  return '';
+}
+
+generateText(data: any) {
+  let command = 'เดินตรงไปแล้ว';
+  console.table(data);
+  for (let i = 0; i < data.length - 2; i++) {
+    const buffer = this.CalculateCrossProduct(data[i], data[i + 1], data[i + 2]);
+    if (buffer !== '') {
+      command += buffer;
+      command += 'จากนั้นมุ่งหน้าต่อไปแล้ว';
     }
   }
+  this.textOrder = command.split(',');
+  this.textOrder.unshift('เริ่มต้น');
+  this.textOrder.pop();
+  this.textOrder.push('เดินตรงไป');
+  this.textOrder.push('ถึงจุดหมาย');
+  console.log(this.textOrder);
+}
 
-  nextText() {
-    if (this.index < this.textOrder.length) {
-      this.navigateText = this.textOrder[this.index];
-      this.index++;
-      this.textToSpeech();
+generateARdata(data: any) {
+  console.table(data);
+  let command = '';
+  for (let i = 0; i < data.length - 2; i++) {
+    const buffer = this.CalculateCrossProductAR(data[i], data[i + 1], data[i + 2]);
+    if (buffer !== '') {
+      command += buffer;
     }
   }
+  const firstnode = data[0].id;
+  const lastnode = data.pop().id;
+  this.arOrder = command.split(',');
+  this.arOrder.unshift('S-' + firstnode);
+  this.arOrder.push('E-' + lastnode);
+  this.arOrder.forEach(element => {
+    if (element) {
+      element += ',';
+      this.messagesUnity += element;
+    }
+  });
+  // console.log(this.messagesUnity);
+}
 
-  backText() {
-    this.index--;
-    if (this.index <= 0) {
-      console.log('back1');
-    } else if (this.index < this.textOrder.length) {
-      this.navigateText = this.textOrder[this.index - 1];
-      this.textToSpeech();
+CostData(data: any) { // data =  path node ทั้งหมด
+  console.table(data);
+  let command = '';
+  const firstnode = data[0].id;
+  const lastnode = data.pop().id;
+  for (let i = 0; i < data.length - 2; i++) {
+    const buffer = this.CalculateCrossProductID(data[i], data[i + 1], data[i + 2]);
+    if (buffer !== '') {
+      command += buffer;
     }
   }
+  this.costOrder = command.split(',');
+  this.costOrder.unshift(firstnode);
+  this.costOrder.push(lastnode);
+  this.costOrder.forEach(ele => {
+    if (ele) {
+      ele += ',';
+      this.costBuffer += ele;
+    }
+  });
+  const dataPath = this.costBuffer.split(',');
+  dataPath.pop();
+  for (let i = 0; i < Object.keys(dataPath).length - 1; i++) {
+    this.findCost(dataPath[i], dataPath[i + 1]);
+  }
+}
 
-  openUnity() {
+nextText() {
+  if (this.index < this.textOrder.length) {
+    this.navigateText = this.textOrder[this.index];
+    this.index++;
+    this.textToSpeech();
+  }
+}
+
+backText() {
+  this.index--;
+  if (this.index <= 0) {
+    console.log('back1');
+  } else if (this.index < this.textOrder.length) {
+    this.navigateText = this.textOrder[this.index - 1];
+    this.textToSpeech();
+  }
+}
+
+openUnity() {
   // It is possible to send a string message to Unity-side (optional)
-    unityARCaller.launchAR( this.messagesUnity, this.uReturnedFromUnity, this.uMessageReceivedFromUnity );
-  }
+  unityARCaller.launchAR(this.messagesUnity, this.uReturnedFromUnity, this.uMessageReceivedFromUnity);
+}
 
-  sendMessageToUnity() {
+sendMessageToUnity() {
   // Send a message to Unity while Unity is still running
-    unityARCaller.sendMessage( 'Function name', 'Optional parameter' );
-  }
+  unityARCaller.sendMessage('Function name', 'Optional parameter');
+}
 
-  uReturnedFromUnity = (param) => {
-    // param:String is the (optional) message returned from Unity-side
-    alert( param );
-  }
+uReturnedFromUnity = (param) => {
+  // param:String is the (optional) message returned from Unity-side
+  alert(param);
+}
 
-  uMessageReceivedFromUnity = (message) => {
-    // message:String is the message received from Unity-side
-    // If you call a UI-blocking function here like 'alert', subsequent messages from Unity
-    // will be queued by the OS and will only be received after returning to Ionic and
-    // unblocking the UI
-    console.log( '=========' + message + '=========' );
-  }
+uMessageReceivedFromUnity = (message) => {
+  // message:String is the message received from Unity-side
+  // If you call a UI-blocking function here like 'alert', subsequent messages from Unity
+  // will be queued by the OS and will only be received after returning to Ionic and
+  // unblocking the UI
+  console.log('=========' + message + '=========');
+}
 
-  backBeforePage() {
-    this.location.back();
-    console.log('back');
-  }
-  backFeedsPage() {
-    this.router.navigateByUrl('/app/tabs/feeds');
-    // this.showCostAllPath();
-  }
+backBeforePage() {
+  this.location.back();
+  console.log('back');
+}
+backFeedsPage() {
+  this.router.navigateByUrl('/app/tabs/feeds');
+  // this.showCostAllPath();
+}
 }
