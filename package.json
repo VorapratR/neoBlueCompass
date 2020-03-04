@@ -15,6 +15,7 @@
   "dependencies": {
     "@angular/common": "~8.1.2",
     "@angular/core": "~8.1.2",
+    "@angular/fire": "^5.4.2",
     "@angular/forms": "~8.1.2",
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
@@ -36,6 +37,7 @@
     "cordova-plugin-pedometer": "^0.4.1",
     "cordova-plugin-tts": "^0.2.3",
     "core-js": "^2.5.4",
+    "firebase": "^7.9.3",
     "ngx-pinch-zoom": "^2.3.4",
     "node-dijkstra": "^2.5.0",
     "phonegap-plugin-barcodescanner": "^8.1.0",
