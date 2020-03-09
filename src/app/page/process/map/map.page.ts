@@ -131,9 +131,12 @@ export class MapPage implements OnInit, OnDestroy {
 
         if (buildings.length > 1) {
           for (let i = 0; i < buildings.length - 1; i++) {
-            this.generateARdata(this.pathResults[i].concat(this.pathResults[i+1]));
-            this.generateText(this.pathResults[i].concat(this.pathResults[i+1]));
+            this.generateARdata(this.pathResults[i].concat(this.pathResults[i + 1]));
+            this.generateText(this.pathResults[i].concat(this.pathResults[i + 1]));
           }
+        } else {
+          this.generateARdata(this.pathResults[0]);
+          this.generateText(this.pathResults[0]);
         }
         // this.CostData(sumResult);
         console.log(this.pathResults);
