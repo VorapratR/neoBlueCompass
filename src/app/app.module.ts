@@ -18,6 +18,9 @@ import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { Pedometer } from '@ionic-native/pedometer/ngx';
 import { BLE} from '@ionic-native/ble/ngx';
 
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
+import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -27,7 +30,9 @@ import { BLE} from '@ionic-native/ble/ngx';
     IonicStorageModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    PinchZoomModule
+    PinchZoomModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule
   ],
   providers: [
     StatusBar,
@@ -37,7 +42,8 @@ import { BLE} from '@ionic-native/ble/ngx';
     TextToSpeech,
     Pedometer,
     BLE,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: FirestoreSettingsToken, useValue: {} }
   ],
   bootstrap: [AppComponent]
 })

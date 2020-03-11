@@ -2,41 +2,42 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { LocationQuery } from '../model/location';
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
+
+export interface Location {
+  id?: string;
+  neighbor: {};
+  x_point: number;
+  y_point: number;
+  floor: number;
+  name: string;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class PsuHospitalService {
 
-  constructor(private https: HttpClient) {
-    this.loadLocation().subscribe(data => {
-      // console.log(data);
-    });
+  private locations: Observable<Location[]>;
+  private locationCollection: AngularFirestoreCollection<Location>;
+  constructor(private https: HttpClient, private afs: AngularFirestore) {
+    this.locationCollection = this.afs.collection<Location>('location');
+    this.locations = this.locationCollection.snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    );
   }
+
+  getAllLocations(): Observable<Location[]> {
+    return this.locations;
+  }
+
   public loadLocation(): Observable<any> {
     return this.https.get('../../assets/map.json');
   }
-  // loadLocation(): Observable<LocationQuery> {
-  //   // const mapsData = require('../../assets/map.json');
-  //   // const nodeDijkstra = require('node-dijkstra');
-  //   console.log(typeof (mapsData));
-  //   return this.https.get(mapsData).pipe(
-  //     map(data => {
-  //       return {
-  //         // tslint:disable-next-line: no-string-literal
-  //         results: data['locations']
-  //       };
-  //     })
-  //   );
 
-  // }
 }
-    // const url = `http://stapi.co/api/v1/rest/location/search?pageNumber=${page}`;
-    // return this.https.get(url).pipe(
-    //   map(data => {
-    //       return {
-    //         results: data['locations'],
-    //         lastPage: data['page']['lastPage']
-    //       };
-    //     })
-    //   );
