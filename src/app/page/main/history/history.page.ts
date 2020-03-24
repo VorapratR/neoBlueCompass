@@ -1,3 +1,4 @@
+import { HistoryListService } from './../../../services/history-list.service';
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 @Component({
@@ -6,13 +7,11 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./history.page.scss'],
 })
 export class HistoryPage implements OnInit {
-  name: string;
-  constructor(private storage: Storage) { }
-
+  Lists = [];
+  constructor(private storage: Storage, private histoList: HistoryListService) {}
   ngOnInit() {
-    this.storage.get('id').then((val) => {
-      console.log('Your age is', val);
+    this.histoList.getHistoList().forEach(element => {
+      this.Lists.push(element);
     });
   }
-
 }
