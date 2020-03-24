@@ -53,8 +53,7 @@ export class MapPage implements OnInit, OnDestroy {
     public pedoCtrl: Pedometer,
     public platform: Platform,
     public ngZoneCtrl: NgZone,
-    private psuHospitalService: PsuHospitalService,
-  ) {
+    private psuHospitalService: PsuHospitalService) {
     this.imgPath.push('../../../../assets/maps/baramee1.png');
     this.imgPath.push('../../../../assets/maps/main1.png');
     this.canvas = document.createElement('canvas');
@@ -66,8 +65,10 @@ export class MapPage implements OnInit, OnDestroy {
     this.idGoal = this.route.snapshot.paramMap.get('end');
     this.startPedometer();
   }
-
-  async findPath() {
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+   async findPath() {
     const nodeDijkstra = require('node-dijkstra');
     this.bsub = this.psuHospitalService.loadLocation().subscribe(
       async data => {
@@ -88,8 +89,8 @@ export class MapPage implements OnInit, OnDestroy {
         const route = new nodeDijkstra(results);
         this.graph = route.path(this.idStart, this.idGoal, { cost: true });
         console.log(this.graph);
-        const drawResult = [];
-        let buildingPath = {};
+        // const drawResult = [];
+        // let buildingPath = {};
         let tmpObj = {};
         let buildings = [];
         if (this.graph) {
@@ -102,7 +103,7 @@ export class MapPage implements OnInit, OnDestroy {
         this.buildings = buildings;
         for (let building of buildings) {
           let tmpArray = [];
-          console.log(building);
+          // console.log(building);
           this.graph.path.forEach(element => {
             Object.keys(this.allLocations).map(
               elem => {
@@ -115,20 +116,21 @@ export class MapPage implements OnInit, OnDestroy {
                     name: this.allLocations[elem].name
                   };
                   if (obj['id'].includes(building)) {
+                    // console.log(obj['id'])
                     tmpArray.push(obj);
                   }
                 }
               });
           });
-          console.log(tmpArray);
           tmpObj[building] = tmpArray;
+          // console.table(tmpObj[building]);
         }
 
         for (let i = 0; i < buildings.length; i++) {
-          console.log(Object.values(tmpObj)[i]);
           this.pathResults.push(Object.values(tmpObj)[i]);
         }
-
+        await this.sleep(1000);
+        console.table(this.pathResults[0]);
         if (buildings.length > 1) {
           for (let i = 0; i < buildings.length - 1; i++) {
             this.generateARdata(this.pathResults[i].concat(this.pathResults[i + 1]));
@@ -138,9 +140,6 @@ export class MapPage implements OnInit, OnDestroy {
           this.generateARdata(this.pathResults[0]);
           this.generateText(this.pathResults[0]);
         }
-        // this.CostData(sumResult);
-        console.log(this.pathResults);
-        console.log(this.buildings);
       });
   }
 
@@ -164,13 +163,13 @@ export class MapPage implements OnInit, OnDestroy {
         );
         const route = new nodeDijkstra(results);
         this.graphCost = route.path(start, goal, { cost: true });
-        console.log(`Cost ${start}-${goal} : ${this.graphCost.cost} `);
+        // console.log(`Cost ${start}-${goal} : ${this.graphCost.cost} `);
         this.addCostAllPath(this.graphCost.cost);
       }
     );
   }
   addCostAllPath(data: any) {
-    console.log(data);
+    // console.log(data);
     this.costAllPath.push(data);
   }
   showCostAllPath() {
@@ -232,22 +231,24 @@ export class MapPage implements OnInit, OnDestroy {
     ctx.strokeStyle = '#00BFFF';
     ctx.setLineDash([20, 5]);
     ctx.lineWidth = 15;
-
     for (let i = 0; i < nodePath.length; i++) {
       if (i === 0 && nodePath[i + 1]) {
-        ctx.fillStyle = '#f542e0';
+        // ctx.font = "40px Verdana";
+        // ctx.fillText('Start', nodePath[i]['x'] - 10, nodePath[i]['y'] - 10);
+        ctx.fillStyle = '#ff0000';
         ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
+        ctx.fillStyle = '#000000';
+
+        // ctx.drawImage(img, nodePath[i]['x'], nodePath[i]['x']);
         ctx.moveTo(nodePath[i]['x'], nodePath[i]['y'])
         ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y'])
       } else if (!nodePath[i + 1]) {
-        if (this.pathResults[1] !== []) {
+          // ctx.moveTo(nodePath[i - 1]['x'], nodePath[i - 1]['y'])
+          // ctx.lineTo(nodePath[i]['x'], nodePath[i]['y'])
           ctx.fillStyle = '#00BFFF';
-        } else {
-          ctx.fillStyle = '#9a38f5';
-        }
-        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
+          ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
       } else {
-        ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y'])
+        ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
       }
     }
     ctx.stroke();
@@ -349,7 +350,7 @@ export class MapPage implements OnInit, OnDestroy {
 
   generateText(data: any) {
     let command = 'เดินตรงไปแล้ว';
-    console.table(data);
+    // console.table(data);
     for (let i = 0; i < data.length - 2; i++) {
       const buffer = this.CalculateCrossProduct(data[i], data[i + 1], data[i + 2]);
       if (buffer !== '') {
@@ -362,11 +363,11 @@ export class MapPage implements OnInit, OnDestroy {
     this.textOrder.pop();
     this.textOrder.push('เดินตรงไป');
     this.textOrder.push('ถึงจุดหมาย');
-    console.log(this.textOrder);
+    // console.log(this.textOrder);
   }
 
   generateARdata(data: any) {
-    console.table(data);
+    // console.table(data);
     let command = '';
     for (let i = 0; i < data.length - 2; i++) {
       const buffer = this.CalculateCrossProductAR(data[i], data[i + 1], data[i + 2]);
@@ -389,7 +390,7 @@ export class MapPage implements OnInit, OnDestroy {
   }
 
   CostData(data: any) { // data =  path node ทั้งหมด
-    console.table(data);
+    // console.table(data);
     let command = '';
     const firstnode = data[0].id;
     const lastnode = data.pop().id;
@@ -426,7 +427,7 @@ export class MapPage implements OnInit, OnDestroy {
   backText() {
     this.index--;
     if (this.index <= 0) {
-      console.log('back1');
+      // console.log('back1');
     } else if (this.index < this.textOrder.length) {
       this.navigateText = this.textOrder[this.index - 1];
       this.textToSpeech();
