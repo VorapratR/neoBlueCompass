@@ -51,6 +51,4 @@ export class LocationComponent implements OnInit {
     console.log(data);
     this.router.navigateByUrl(data);
   }
-
-
 }
