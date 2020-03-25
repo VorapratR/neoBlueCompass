@@ -12,6 +12,7 @@ export class LocationComponent implements OnInit {
   @Input() location: Location;
   @Input() index: number;
   @Input() typeShowData: boolean;
+  filterLocation: Location;
   public imagePath: string;
   public defaulfImage: string;
   constructor(private router: Router, private histoList: HistoryListService) { }

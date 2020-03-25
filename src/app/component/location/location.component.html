@@ -1,6 +1,6 @@
 <div *ngIf="location.name">
   <ion-grid *ngIf="!typeShowData">
-    <ion-item *ngIf="index % 2 != 0" shape="round" (click)="goToPlanpage()">
+    <ion-item shape="round" color="primary" (click)="goToPlanpage()">
       <ion-avatar slot="start">
         <img *ngIf="imagePath" src={{imagePath}}
           style="margin-left: auto;margin-right: auto;" />
@@ -10,18 +10,6 @@
       <ion-label>
         <h1 text-wrap><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
         <h2 *ngIf="location.building">ตึก:{{location.building}} ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</h2>
-      </ion-label>
-    </ion-item>
-    <ion-item *ngIf="index % 2 == 0" shape="round" color="primary" (click)="goToPlanpage()">
-      <ion-avatar slot="start">
-        <img *ngIf="imagePath" src={{imagePath}}
-          style="margin-left: auto;margin-right: auto;" />
-        <img *ngIf="!imagePath" src={{defaulfImage}}
-          style="margin-left: auto;margin-right: auto;" />
-      </ion-avatar>
-      <ion-label>
-        <h1 text-wrap><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
-        <h2 *ngIf="location.building">ตึก:{{location.building}}ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</h2>
       </ion-label>
     </ion-item>
   </ion-grid>
