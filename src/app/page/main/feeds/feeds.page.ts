@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '../../../model/location';
-import { PsuHospitalService } from '../../../services/psu-hospital.service';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
 @Component({
   selector: 'app-feeds',
   templateUrl: './feeds.page.html',

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color='primary'>
-    <h3 class="text-center">History</h3>
+    <h3 text-center>History</h3>
   </ion-toolbar>
 </ion-header>
 
@@ -14,15 +14,17 @@
 
     <ion-grid>
       <ion-grid>
-        <ion-item shape="round" color="primary">
-          <ion-avatar slot="start">
-            <img src="../../../../assets/compass.svg">
-          </ion-avatar>
-          <ion-label>
-          <h1><b>{{name}}</b></h1>
-            <h2>วันที่: ../../.. </h2>
-          </ion-label>
+        <ion-list *ngIf="this.Lists.length !== 0">
+          <ion-item *ngFor="let end of this.Lists" shape="round" color="primary" style="margin-bottom: 2%;">
+            <ion-avatar slot="start">
+              <img src="../../../../assets/compass.svg">
+            </ion-avatar>
+            <ion-label>
+            <h1><b>{{end}}</b></h1>
+            </ion-label>
         </ion-item>
+        </ion-list>
+       
       </ion-grid>
     </ion-grid>
 
