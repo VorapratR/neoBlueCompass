@@ -1,38 +1,42 @@
-<ion-grid *ngIf="!typeShowData">
-    <ion-item *ngIf="index % 2 != 0" shape="round" color="blue"  (click)="goToPlanpage()">
+<div *ngIf="location.name">
+  <ion-grid *ngIf="!typeShowData">
+    <ion-item *ngIf="index % 2 != 0" shape="round" (click)="goToPlanpage()">
       <ion-avatar slot="start">
-        <img src="../../../assets/icon/compass-with-white-needles.svg" color="indigo">
+        <img *ngIf="imagePath" src={{imagePath}}
+          style="margin-left: auto;margin-right: auto;" />
+        <img *ngIf="!imagePath" src={{defaulfImage}}
+          style="margin-left: auto;margin-right: auto;" />
       </ion-avatar>
       <ion-label>
         <h1 text-wrap><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
         <h2 *ngIf="location.building">ตึก:{{location.building}} ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</h2>
       </ion-label>
     </ion-item>
-    <ion-item *ngIf="index % 2 == 0" shape="round" color="primary"  (click)="goToPlanpage()">
+    <ion-item *ngIf="index % 2 == 0" shape="round" color="primary" (click)="goToPlanpage()">
       <ion-avatar slot="start">
-        <img src="../../../assets/icon/compass-with-white-needles.svg">
+        <img *ngIf="imagePath" src={{imagePath}}
+          style="margin-left: auto;margin-right: auto;" />
+        <img *ngIf="!imagePath" src={{defaulfImage}}
+          style="margin-left: auto;margin-right: auto;" />
       </ion-avatar>
       <ion-label>
         <h1 text-wrap><b>{{location.name ||'ไม่มีพบข้อมูล'}} </b></h1>
         <h2 *ngIf="location.building">ตึก:{{location.building}}ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</h2>
       </ion-label>
     </ion-item>
-</ion-grid>
+  </ion-grid>
+</div>
 
-<!-- <ion-card *ngIf="typeShowData" color="primary"  (click)="goToPlanpage()">
-  <img src="../../../assets/icon/compass-with-white-needles.svg" style="margin-left: auto;margin-right: auto;display: block;width: 50%;margin-top: 7%;"/>
-  <ion-card-header>
-    <ion-card-subtitle text-center class="ion-padding">
-        <h1> {{location.name ||'ไม่มีพบข้อมูล'}} </h1>
-    </ion-card-subtitle>
-  </ion-card-header>
-</ion-card> -->
-
-<ion-card *ngIf="typeShowData" color="primary"  (click)="goToPlanpage()">
-  <img *ngIf="imagePath" src={{imagePath}} style="margin-left: auto;margin-right: auto;display: block;width: 40%;margin-top: 7%;"/>
-  <img *ngIf="!imagePath" src={{defaulfImage}} style="margin-left: auto;margin-right: auto;display: block;width: 40%;margin-top: 7%;"/>
-  <ion-card-header>
-    <ion-card-title *ngIf="location.building">ตึก: {{location.building}} | ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}</ion-card-title>
-    <h1 style="margin-top: 0%;">{{location.name ||'ไม่มีพบข้อมูล'}}</h1>
-  </ion-card-header>
-</ion-card>
+<div *ngIf="location.name">
+  <ion-card *ngIf="typeShowData" color="primary" (click)="goToPlanpage()">
+    <img *ngIf="imagePath" src={{imagePath}}
+      style="margin-left: auto;margin-right: auto;display: block;width: 40%;margin-top: 7%;" />
+    <img *ngIf="!imagePath" src={{defaulfImage}}
+      style="margin-left: auto;margin-right: auto;display: block;width: 40%;margin-top: 7%;" />
+    <ion-card-header>
+      <ion-card-title *ngIf="location.building">ตึก: {{location.building}} | ชั้น {{location.floor ||'ไม่มีพบข้อมูล'}}
+      </ion-card-title>
+      <h1 style="margin-top: 0%;">{{location.name ||'ไม่มีพบข้อมูล'}}</h1>
+    </ion-card-header>
+  </ion-card>
+</div>
