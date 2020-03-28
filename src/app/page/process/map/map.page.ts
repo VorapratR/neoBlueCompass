@@ -68,11 +68,12 @@ export class MapPage implements OnInit, OnDestroy {
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-   async findPath() {
+  async findPath() {
     const nodeDijkstra = require('node-dijkstra');
     this.bsub = this.psuHospitalService.loadLocation().subscribe(
       async data => {
-        data.locations.forEach(element => {
+        // tslint:disable-next-line:no-shadowed-variable
+        data.locations.forEach((element: { id: string; name: string; }) => {
           if (element.id === this.idGoal) {
             this.nameGoal = element.name;
           }
@@ -91,8 +92,8 @@ export class MapPage implements OnInit, OnDestroy {
         console.log(this.graph);
         // const drawResult = [];
         // let buildingPath = {};
-        let tmpObj = {};
-        let buildings = [];
+        const tmpObj = {};
+        const buildings = [];
         if (this.graph) {
           this.graph.path.forEach(path => {
             if (!buildings.includes(path.split('_')[0])) {
@@ -101,10 +102,11 @@ export class MapPage implements OnInit, OnDestroy {
           });
         }
         this.buildings = buildings;
-        for (let building of buildings) {
-          let tmpArray = [];
+        for (const building of buildings) {
+          const tmpArray = [];
           // console.log(building);
-          this.graph.path.forEach(element => {
+          // tslint:disable-next-line:no-shadowed-variable
+          this.graph.path.forEach((element: any) => {
             Object.keys(this.allLocations).map(
               elem => {
                 let obj = {};
@@ -140,6 +142,7 @@ export class MapPage implements OnInit, OnDestroy {
           this.generateARdata(this.pathResults[0]);
           this.generateText(this.pathResults[0]);
         }
+        console.log(this.imgCanvas);
       });
   }
 
@@ -147,7 +150,8 @@ export class MapPage implements OnInit, OnDestroy {
     const nodeDijkstra = require('node-dijkstra');
     this.psuHospitalService.loadLocation().subscribe(
       data => {
-        data.locations.forEach(element => {
+        // tslint:disable-next-line:no-shadowed-variable
+        data.locations.forEach((element: { id: string; name: string; }) => {
           if (element.id === this.idGoal) {
             this.nameGoal = element.name;
           }
@@ -187,6 +191,7 @@ export class MapPage implements OnInit, OnDestroy {
         this.imgCanvas.push('data:image/jpg;base64,' + data);
       });
     });
+    console.log(this.imgPath);
   }
 
   ngOnDestroy() {
@@ -216,7 +221,7 @@ export class MapPage implements OnInit, OnDestroy {
   getBase64Image(img: HTMLImageElement) {
     this.canvas.width = img.width;
     this.canvas.height = img.height;
-    for (let building of this.buildings) {
+    for (const building of this.buildings) {
       if (img.src.includes(building)) {
         this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[this.buildings.indexOf(building)]);
       }
@@ -225,7 +230,10 @@ export class MapPage implements OnInit, OnDestroy {
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
   // nodePath เป็น array ของ pathResults ที่ใช้ในการสร้าง map
+  // tslint:disable-next-line:ban-types
   drawLine(ctx: any, img: HTMLImageElement, nodePath: Object[]) {
+    console.log('start drawLine');
+    console.log(nodePath);
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
     ctx.strokeStyle = '#00BFFF';
@@ -380,6 +388,7 @@ export class MapPage implements OnInit, OnDestroy {
     this.arOrder = command.split(',');
     this.arOrder.unshift('S-' + firstnode);
     this.arOrder.push('E-' + lastnode);
+    // tslint:disable-next-line:no-shadowed-variable
     this.arOrder.forEach(element => {
       if (element) {
         element += ',';
