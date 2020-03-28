@@ -6,7 +6,7 @@ import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-nativ
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { Pedometer } from '@ionic-native/pedometer/ngx';
 import { Platform } from '@ionic/angular';
-import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
+import { PsuHospitalService, Locations } from 'src/app/services/psu-hospital.service';
 import { element } from 'protractor';
 import { SSL_OP_CRYPTOPRO_TLSEXT_BUG } from 'constants';
 import { async } from '@angular/core/testing';
@@ -36,7 +36,7 @@ export class MapPage implements OnInit, OnDestroy {
   compass: number;
   stepCount: number;
   meterCount: number;
-  allLocations: Array<Location> = [];
+  allLocations: Array<Locations> = [];
   bsub: Subscription;
   graph: any = {};
   graphCost: any = {};

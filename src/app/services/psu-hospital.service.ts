@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 
-export interface Location {
+export interface Locations {
   id?: string;
   neighbor: {};
   x_point: number;
@@ -17,10 +17,10 @@ export interface Location {
 })
 export class PsuHospitalService {
 
-  private locations: Observable<Location[]>;
-  private locationCollection: AngularFirestoreCollection<Location>;
+  private locations: Observable<Locations[]>;
+  private locationCollection: AngularFirestoreCollection<Locations>;
   constructor(private https: HttpClient, private afs: AngularFirestore) {
-    this.locationCollection = this.afs.collection<Location>('location');
+    this.locationCollection = this.afs.collection<Locations>('location');
     this.locations = this.locationCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
@@ -32,7 +32,7 @@ export class PsuHospitalService {
     );
   }
 
-  getAllLocations(): Observable<Location[]> {
+  getAllLocations(): Observable<Locations[]> {
     return this.locations;
   }
 
