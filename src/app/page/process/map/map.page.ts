@@ -2,14 +2,11 @@ import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observer, Observable, Subscription } from 'rxjs';
-import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
+import { DeviceOrientation} from '@ionic-native/device-orientation/ngx';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { Pedometer } from '@ionic-native/pedometer/ngx';
-import { Platform } from '@ionic/angular';
+import { Platform, LoadingController } from '@ionic/angular';
 import { PsuHospitalService, Locations } from 'src/app/services/psu-hospital.service';
-import { element } from 'protractor';
-import { SSL_OP_CRYPTOPRO_TLSEXT_BUG } from 'constants';
-import { async } from '@angular/core/testing';
 import { __await } from 'tslib';
 declare let unityARCaller: any;
 
@@ -37,7 +34,7 @@ export class MapPage implements OnInit, OnDestroy {
   stepCount: number;
   meterCount: number;
   allLocations: Array<Locations> = [];
-  bsub: Subscription;
+  locationSubscription: Subscription;
   graph: any = {};
   graphCost: any = {};
   textOrder: string[] = ['เริ่มต้น'];
@@ -53,7 +50,9 @@ export class MapPage implements OnInit, OnDestroy {
     public pedoCtrl: Pedometer,
     public platform: Platform,
     public ngZoneCtrl: NgZone,
-    private psuHospitalService: PsuHospitalService) {
+    private psuHospitalService: PsuHospitalService,
+    private loadingController: LoadingController
+  ) {
     this.imgPath.push('../../../../assets/maps/baramee1.png');
     this.imgPath.push('../../../../assets/maps/main1.png');
     this.canvas = document.createElement('canvas');
@@ -65,38 +64,54 @@ export class MapPage implements OnInit, OnDestroy {
     this.idGoal = this.route.snapshot.paramMap.get('end');
     this.startPedometer();
   }
+
   ngOnInit() {
+    this.handleButtonClick();
     this.textOrder = ['เริ่มต้น'];
     this.index = 0;
     this.pathResults = [];
     this.findPath();
-    // tslint:disable-next-line: no-shadowed-variable
-    this.imgPath.forEach(element => {
-      this.getBase64ImageFromURL(element).subscribe(data => {
-        this.imgCanvas.push('data:image/jpg;base64,' + data);
+
+    setTimeout(() => {
+      this.imgPath.forEach(element => {
+        this.getBase64ImageFromURL(element).subscribe(data => {
+          this.imgCanvas.push('data:image/jpg;base64,' + data);
+        });
       });
+    }, 3400);
+  }
+
+  async  handleButtonClick() {
+    const loading = await this.loadingController.create({
+      message: 'กรุณารอสักครู่...',
+      translucent: true,
+      animated: true,
+      backdropDismiss: true,
+      duration: 3500
     });
-    console.log(this.imgPath);
+    await loading.present();
   }
 
   ngOnDestroy() {
-    this.bsub.unsubscribe();
+    this.locationSubscription.unsubscribe();
   }
+
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
   async findPath() {
     const nodeDijkstra = require('node-dijkstra');
-    this.bsub = this.psuHospitalService.loadLocation().subscribe(
+    this.locationSubscription = await this.psuHospitalService.getAllLocations().subscribe(
       async data => {
         // tslint:disable-next-line:no-shadowed-variable
-        data.locations.forEach((element) => {
+        data.forEach((element) => {
           if (element.id === this.idGoal) {
             this.nameGoal = element.name;
           }
         });
         this.graph = {};
-        this.allLocations = data.locations;
+        this.allLocations = data;
         const results = {};
         Object.keys(this.allLocations).map(
           elem => {
@@ -112,13 +127,14 @@ export class MapPage implements OnInit, OnDestroy {
         const tmpObj = {};
         const buildings = [];
         if (this.graph) {
-          this.graph.path.forEach(path => {
+          await this.graph.path.forEach(path => {
             if (!buildings.includes(path.split('_')[0])) {
               buildings.push(path.split('_')[0]);
             }
           });
         }
         this.buildings = buildings;
+        console.log(this.buildings);
         for (const building of buildings) {
           const tmpArray = [];
           // console.log(building);
@@ -130,8 +146,8 @@ export class MapPage implements OnInit, OnDestroy {
                 if (element === this.allLocations[elem].id) {
                   obj = {
                     id: this.allLocations[elem].id,
-                    x: this.allLocations[elem].x,
-                    y: this.allLocations[elem].y,
+                    x: this.allLocations[elem].x_point,
+                    y: this.allLocations[elem].y_point,
                     name: this.allLocations[elem].name
                   };
                   if (obj['id'].includes(building)) {
@@ -159,22 +175,21 @@ export class MapPage implements OnInit, OnDestroy {
           this.generateARdata(this.pathResults[0]);
           this.generateText(this.pathResults[0]);
         }
-        console.log(this.imgCanvas);
       });
   }
 
   findCost(start: string, goal: string) {
     const nodeDijkstra = require('node-dijkstra');
-    this.psuHospitalService.loadLocation().subscribe(
+    this.psuHospitalService.getAllLocations().subscribe(
       data => {
         // tslint:disable-next-line:no-shadowed-variable
-        data.locations.forEach((element) => {
+        data.forEach((element) => {
           if (element.id === this.idGoal) {
             this.nameGoal = element.name;
           }
         });
         this.graphCost = {};
-        this.allLocations = data.locations;
+        this.allLocations = data;
         const results = {};
         Object.keys(this.allLocations).map(
           elem => {
@@ -189,10 +204,12 @@ export class MapPage implements OnInit, OnDestroy {
       }
     );
   }
+
   addCostAllPath(data: any) {
     // console.log(data);
     this.costAllPath.push(data);
   }
+
   showCostAllPath() {
     console.log(this.costAllPath);
   }
@@ -200,7 +217,6 @@ export class MapPage implements OnInit, OnDestroy {
   getBase64ImageFromURL(url: string) {
     return Observable.create((observer: Observer<string>) => {
       const img = new Image();
-      img.crossOrigin = 'Anonymous';
       img.src = url;
       if (!img.complete) {
         img.onload = () => {
@@ -231,8 +247,6 @@ export class MapPage implements OnInit, OnDestroy {
   // nodePath เป็น array ของ pathResults ที่ใช้ในการสร้าง map
   // tslint:disable-next-line:ban-types
   drawLine(ctx: any, img: HTMLImageElement, nodePath: Object[]) {
-    console.log('start drawLine');
-    console.log(nodePath);
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
     ctx.strokeStyle = '#00BFFF';

@@ -1,3 +1,4 @@
+import { log } from 'util';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PsuHospitalService, Locations} from 'src/app/services/psu-hospital.service';
@@ -13,17 +14,14 @@ export class FeedsPage implements OnInit, OnDestroy {
   textStatus = 'สถานที่ทั้งหมด';
   searchInput = '';
   typeShowData = true;
-  asub: Subscription;
+  locationSubscription: Subscription;
   constructor(private psuHospitalService: PsuHospitalService) {
-    this.psuHospitalService.getAllLocations().subscribe(
+    this.locationSubscription =  this.psuHospitalService.getAllLocations().subscribe(
       data => {
         this.allLocations = data;
         this.filterLocations = data;
       }
     );
-  }
-
-  ngOnInit() {
   }
 
   inputSearch(event) {
@@ -44,6 +42,6 @@ export class FeedsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.asub.unsubscribe();
+    this.locationSubscription.unsubscribe();
   }
 }
