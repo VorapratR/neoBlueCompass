@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { log } from 'util';
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
@@ -81,11 +82,13 @@ export class MapPage implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.imgPath.forEach((element: Imgs) => {
-        this.getBase64ImageFromURL(element).subscribe(data => {
-          this.imgCanvas.push('data:image/jpg;base64,' + data);
+        this.getBase64ImageFromURL(element).subscribe(async data => {
+          if (data) {
+            await this.imgCanvas.push('data:image/jpg;base64,' + data);
+          }
         });
       });
-    }, 4000);
+    }, 3000);
   }
 
   async  handleButtonClick() {
@@ -94,7 +97,7 @@ export class MapPage implements OnInit, OnDestroy {
       translucent: true,
       animated: true,
       backdropDismiss: true,
-      duration: 4100
+      duration: 3100
     });
     await loading.present();
   }
@@ -247,6 +250,8 @@ export class MapPage implements OnInit, OnDestroy {
     for (const building of this.buildings) {
       if (tag.includes(building)) {
         this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[this.buildings.indexOf(building)]);
+      } else {
+        return 0;
       }
     }
     const dataURL = this.canvas.toDataURL('image/png');
