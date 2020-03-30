@@ -85,7 +85,7 @@ export class MapPage implements OnInit, OnDestroy {
           this.imgCanvas.push('data:image/jpg;base64,' + data);
         });
       });
-    }, 3000);
+    }, 4000);
   }
 
   async  handleButtonClick() {
@@ -94,7 +94,7 @@ export class MapPage implements OnInit, OnDestroy {
       translucent: true,
       animated: true,
       backdropDismiss: true,
-      duration: 3100
+      duration: 4100
     });
     await loading.present();
   }
