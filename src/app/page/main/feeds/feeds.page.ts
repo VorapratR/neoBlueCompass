@@ -1,5 +1,5 @@
 import { log } from 'util';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PsuHospitalService, Locations} from 'src/app/services/psu-hospital.service';
 @Component({
@@ -7,7 +7,7 @@ import { PsuHospitalService, Locations} from 'src/app/services/psu-hospital.serv
   templateUrl: './feeds.page.html',
   styleUrls: ['./feeds.page.scss'],
 })
-export class FeedsPage implements OnInit, OnDestroy {
+export class FeedsPage implements OnDestroy {
   allLocations: Array<Locations> = [];
   filterLocations: Array<Locations>  = [];
   lastPage  = false;

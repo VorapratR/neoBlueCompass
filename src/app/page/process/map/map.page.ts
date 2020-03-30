@@ -1,3 +1,4 @@
+import { log } from 'util';
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,7 +7,7 @@ import { DeviceOrientation} from '@ionic-native/device-orientation/ngx';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { Pedometer } from '@ionic-native/pedometer/ngx';
 import { Platform, LoadingController } from '@ionic/angular';
-import { PsuHospitalService, Locations } from 'src/app/services/psu-hospital.service';
+import { PsuHospitalService, Locations, Imgs } from 'src/app/services/psu-hospital.service';
 import { __await } from 'tslib';
 declare let unityARCaller: any;
 
@@ -18,7 +19,7 @@ declare let unityARCaller: any;
 export class MapPage implements OnInit, OnDestroy {
   canvas: any;
   pedometerData: any;
-  imgPath: Array<string> = [];
+  imgPath: Array<Imgs> = [];
   imgCanvas: Array<string> = [];
   color: string;
   idStart: string;
@@ -35,6 +36,7 @@ export class MapPage implements OnInit, OnDestroy {
   meterCount: number;
   allLocations: Array<Locations> = [];
   locationSubscription: Subscription;
+  imgSubscription: Subscription;
   graph: any = {};
   graphCost: any = {};
   textOrder: string[] = ['เริ่มต้น'];
@@ -53,8 +55,13 @@ export class MapPage implements OnInit, OnDestroy {
     private psuHospitalService: PsuHospitalService,
     private loadingController: LoadingController
   ) {
-    this.imgPath.push('../../../../assets/maps/baramee1.png');
-    this.imgPath.push('../../../../assets/maps/main1.png');
+    this.imgSubscription = this.psuHospitalService.getAllImgs().subscribe(
+      data => {
+        data.forEach((element: Imgs) => {
+          this.imgPath.push(element);
+        });
+      }
+    );
     this.canvas = document.createElement('canvas');
     this.color = 'rgb(255,255,255)';
     this.navigateText = 'สวัสดีครับ.';
@@ -73,12 +80,12 @@ export class MapPage implements OnInit, OnDestroy {
     this.findPath();
 
     setTimeout(() => {
-      this.imgPath.forEach(element => {
+      this.imgPath.forEach((element: Imgs) => {
         this.getBase64ImageFromURL(element).subscribe(data => {
           this.imgCanvas.push('data:image/jpg;base64,' + data);
         });
       });
-    }, 3400);
+    }, 3000);
   }
 
   async  handleButtonClick() {
@@ -87,7 +94,7 @@ export class MapPage implements OnInit, OnDestroy {
       translucent: true,
       animated: true,
       backdropDismiss: true,
-      duration: 3500
+      duration: 3100
     });
     await loading.present();
   }
@@ -214,30 +221,31 @@ export class MapPage implements OnInit, OnDestroy {
     console.log(this.costAllPath);
   }
 
-  getBase64ImageFromURL(url: string) {
+  getBase64ImageFromURL(data: Imgs) {
     return Observable.create((observer: Observer<string>) => {
       const img = new Image();
-      img.src = url;
+      const tag = data.tag;
+      img.src = data.data;
       if (!img.complete) {
         img.onload = () => {
-          observer.next(this.getBase64Image(img));
+          observer.next(this.getBase64Image(img, tag));
           observer.complete();
         };
         img.onerror = (err) => {
           observer.error(err);
         };
       } else {
-        observer.next(this.getBase64Image(img));
+        observer.next(this.getBase64Image(img, tag));
         observer.complete();
       }
     });
   }
 
-  getBase64Image(img: HTMLImageElement) {
+  getBase64Image(img: HTMLImageElement, tag: string) {
     this.canvas.width = img.width;
     this.canvas.height = img.height;
     for (const building of this.buildings) {
-      if (img.src.includes(building)) {
+      if (tag.includes(building)) {
         this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[this.buildings.indexOf(building)]);
       }
     }

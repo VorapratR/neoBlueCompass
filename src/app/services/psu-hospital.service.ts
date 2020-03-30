@@ -18,6 +18,7 @@ export interface Imgs {
   id: string;
   data: string;
   name: string;
+  tag: string;
 }
 
 @Injectable({
