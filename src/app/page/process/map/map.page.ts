@@ -268,21 +268,21 @@ export class MapPage implements OnInit, OnDestroy {
     for (let i = 0; i < nodePath.length; i++) {
       if (i === 0 && nodePath[i + 1]) {
         // ctx.font = "40px Verdana";
-        // ctx.fillText('Start', nodePath[i]['x_point'] - 10, nodePath[i]['y_point'] - 10);
+        // ctx.fillText('Start', nodePath[i]['x'] - 10, nodePath[i]['y'] - 10);
         ctx.fillStyle = '#ff0000';
-        ctx.fillRect(nodePath[i]['x_point'] - 10, nodePath[i]['y_point'], 20, 20);
+        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
         ctx.fillStyle = '#000000';
 
-        // ctx.drawImage(img, nodePath[i]['x_point'], nodePath[i]['x_point']);
-        ctx.moveTo(nodePath[i]['x_point'], nodePath[i]['y_point'])
-        ctx.lineTo(nodePath[i + 1]['x_point'], nodePath[i + 1]['y_point'])
+        // ctx.drawImage(img, nodePath[i]['x'], nodePath[i]['x']);
+        ctx.moveTo(nodePath[i]['x'], nodePath[i]['y'])
+        ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y'])
       } else if (!nodePath[i + 1]) {
-          // ctx.moveTo(nodePath[i - 1]['x_point'], nodePath[i - 1]['y_point'])
-          // ctx.lineTo(nodePath[i]['x_point'], nodePath[i]['y_point'])
+          // ctx.moveTo(nodePath[i - 1]['x'], nodePath[i - 1]['y'])
+          // ctx.lineTo(nodePath[i]['x'], nodePath[i]['y'])
           ctx.fillStyle = '#00BFFF';
-          ctx.fillRect(nodePath[i]['x_point'] - 10, nodePath[i]['y_point'], 20, 20);
+          ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
       } else {
-        ctx.lineTo(nodePath[i + 1]['x_point'], nodePath[i + 1]['y_point']);
+        ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
       }
     }
     ctx.stroke();
