@@ -234,21 +234,21 @@ export class MapPage implements OnInit, OnDestroy {
     for (let i = 0; i < nodePath.length; i++) {
       if (i === 0 && nodePath[i + 1]) {
         // ctx.font = "40px Verdana";
-        // ctx.fillText('Start', nodePath[i]['x'] - 10, nodePath[i]['y'] - 10);
+        // ctx.fillText('Start', nodePath[i]['x_point'] - 10, nodePath[i]['y_point'] - 10);
         ctx.fillStyle = '#ff0000';
-        ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
+        ctx.fillRect(nodePath[i]['x_point'] - 10, nodePath[i]['y_point'], 20, 20);
         ctx.fillStyle = '#000000';
 
-        // ctx.drawImage(img, nodePath[i]['x'], nodePath[i]['x']);
-        ctx.moveTo(nodePath[i]['x'], nodePath[i]['y'])
-        ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y'])
+        // ctx.drawImage(img, nodePath[i]['x_point'], nodePath[i]['x_point']);
+        ctx.moveTo(nodePath[i]['x_point'], nodePath[i]['y_point'])
+        ctx.lineTo(nodePath[i + 1]['x_point'], nodePath[i + 1]['y_point'])
       } else if (!nodePath[i + 1]) {
-          // ctx.moveTo(nodePath[i - 1]['x'], nodePath[i - 1]['y'])
-          // ctx.lineTo(nodePath[i]['x'], nodePath[i]['y'])
+          // ctx.moveTo(nodePath[i - 1]['x_point'], nodePath[i - 1]['y_point'])
+          // ctx.lineTo(nodePath[i]['x_point'], nodePath[i]['y_point'])
           ctx.fillStyle = '#00BFFF';
-          ctx.fillRect(nodePath[i]['x'] - 10, nodePath[i]['y'], 20, 20);
+          ctx.fillRect(nodePath[i]['x_point'] - 10, nodePath[i]['y_point'], 20, 20);
       } else {
-        ctx.lineTo(nodePath[i + 1]['x'], nodePath[i + 1]['y']);
+        ctx.lineTo(nodePath[i + 1]['x_point'], nodePath[i + 1]['y_point']);
       }
     }
     ctx.stroke();
@@ -322,12 +322,12 @@ export class MapPage implements OnInit, OnDestroy {
     // console.log('====> b in cp', B);
     if (crossProduct > 0) {
       // console.log(`เลี้ยวขวา${B.name}`);
-      return `R-${B.id},`;
+      return `R-${B.id}-${B.name},`;
     } else if (crossProduct < 0) {
       // console.log(`เลี้ยวซ้าย${B.name}`);
-      return `L-${B.id},`;
+      return `L-${B.id}-${B.name},`;
     } else if (crossProduct === 0) {
-      return `N-${B.id},`;
+      return `N-${B.id}-${B.name},`;
     }
     return '';
   }
