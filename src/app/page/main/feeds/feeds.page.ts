@@ -1,37 +1,33 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Location } from '../../../model/location';
+import { log } from 'util';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
+import { PsuHospitalService, Locations} from 'src/app/services/psu-hospital.service';
 @Component({
   selector: 'app-feeds',
   templateUrl: './feeds.page.html',
   styleUrls: ['./feeds.page.scss'],
 })
-export class FeedsPage implements OnInit, OnDestroy {
-  allLocations: Array<Location> = [];
-  filterLocations: Array<Location>  = [];
+export class FeedsPage implements OnDestroy {
+  allLocations: Array<Locations> = [];
+  filterLocations: Array<Locations>  = [];
   lastPage  = false;
   textStatus = 'สถานที่ทั้งหมด';
   searchInput = '';
   typeShowData = true;
-  asub: Subscription;
+  locationSubscription: Subscription;
   constructor(private psuHospitalService: PsuHospitalService) {
-    this.asub = this.psuHospitalService.loadLocation().subscribe(
+    this.locationSubscription =  this.psuHospitalService.getAllLocations().subscribe(
       data => {
-        this.allLocations = data.locations;
-        this.filterLocations = data.locations;
+        this.allLocations = data;
+        this.filterLocations = data;
       }
     );
-  }
-
-  ngOnInit() {
   }
 
   inputSearch(event) {
     this.textStatus = 'ผลการค้นหา';
     const result = event.target.value;
     this.searchInput = result;
-    console.log(this.searchInput);
     this.setFilteredLocations();
   }
 
@@ -46,6 +42,6 @@ export class FeedsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.asub.unsubscribe();
+    this.locationSubscription.unsubscribe();
   }
 }

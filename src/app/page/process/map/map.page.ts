@@ -1,15 +1,14 @@
+import { async } from '@angular/core/testing';
+import { log } from 'util';
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observer, Observable, Subscription } from 'rxjs';
-import { DeviceOrientation, DeviceOrientationCompassHeading } from '@ionic-native/device-orientation/ngx';
+import { DeviceOrientation} from '@ionic-native/device-orientation/ngx';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { Pedometer } from '@ionic-native/pedometer/ngx';
-import { Platform } from '@ionic/angular';
-import { PsuHospitalService } from 'src/app/services/psu-hospital.service';
-import { element } from 'protractor';
-import { SSL_OP_CRYPTOPRO_TLSEXT_BUG } from 'constants';
-import { async } from '@angular/core/testing';
+import { Platform, LoadingController } from '@ionic/angular';
+import { PsuHospitalService, Locations, Imgs } from 'src/app/services/psu-hospital.service';
 import { __await } from 'tslib';
 declare let unityARCaller: any;
 
@@ -21,7 +20,7 @@ declare let unityARCaller: any;
 export class MapPage implements OnInit, OnDestroy {
   canvas: any;
   pedometerData: any;
-  imgPath: Array<string> = [];
+  imgPath: Array<Imgs> = [];
   imgCanvas: Array<string> = [];
   color: string;
   idStart: string;
@@ -36,8 +35,9 @@ export class MapPage implements OnInit, OnDestroy {
   compass: number;
   stepCount: number;
   meterCount: number;
-  allLocations: Array<Location> = [];
-  bsub: Subscription;
+  allLocations: Array<Locations> = [];
+  locationSubscription: Subscription;
+  imgSubscription: Subscription;
   graph: any = {};
   graphCost: any = {};
   textOrder: string[] = ['เริ่มต้น'];
@@ -53,9 +53,16 @@ export class MapPage implements OnInit, OnDestroy {
     public pedoCtrl: Pedometer,
     public platform: Platform,
     public ngZoneCtrl: NgZone,
-    private psuHospitalService: PsuHospitalService) {
-    this.imgPath.push('../../../../assets/maps/baramee1.png');
-    this.imgPath.push('../../../../assets/maps/main1.png');
+    private psuHospitalService: PsuHospitalService,
+    private loadingController: LoadingController
+  ) {
+    this.imgSubscription = this.psuHospitalService.getAllImgs().subscribe(
+      data => {
+        data.forEach((element: Imgs) => {
+          this.imgPath.push(element);
+        });
+      }
+    );
     this.canvas = document.createElement('canvas');
     this.color = 'rgb(255,255,255)';
     this.navigateText = 'สวัสดีครับ.';
@@ -65,20 +72,56 @@ export class MapPage implements OnInit, OnDestroy {
     this.idGoal = this.route.snapshot.paramMap.get('end');
     this.startPedometer();
   }
+
+  ngOnInit() {
+    this.handleButtonClick();
+    this.textOrder = ['เริ่มต้น'];
+    this.index = 0;
+    this.pathResults = [];
+    this.findPath();
+
+    setTimeout(() => {
+      this.imgPath.forEach((element: Imgs) => {
+        this.getBase64ImageFromURL(element).subscribe(async data => {
+          if (data) {
+            await this.imgCanvas.push('data:image/jpg;base64,' + data);
+          }
+        });
+      });
+    }, 3000);
+  }
+
+  async  handleButtonClick() {
+    const loading = await this.loadingController.create({
+      message: 'กรุณารอสักครู่...',
+      translucent: true,
+      animated: true,
+      backdropDismiss: true,
+      duration: 3100
+    });
+    await loading.present();
+  }
+
+  ngOnDestroy() {
+    this.locationSubscription.unsubscribe();
+  }
+
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-   async findPath() {
+
+  async findPath() {
     const nodeDijkstra = require('node-dijkstra');
-    this.bsub = this.psuHospitalService.loadLocation().subscribe(
+    this.locationSubscription = await this.psuHospitalService.getAllLocations().subscribe(
       async data => {
-        data.locations.forEach(element => {
+        // tslint:disable-next-line:no-shadowed-variable
+        data.forEach((element) => {
           if (element.id === this.idGoal) {
             this.nameGoal = element.name;
           }
         });
         this.graph = {};
-        this.allLocations = data.locations;
+        this.allLocations = data;
         const results = {};
         Object.keys(this.allLocations).map(
           elem => {
@@ -91,28 +134,30 @@ export class MapPage implements OnInit, OnDestroy {
         console.log(this.graph);
         // const drawResult = [];
         // let buildingPath = {};
-        let tmpObj = {};
-        let buildings = [];
+        const tmpObj = {};
+        const buildings = [];
         if (this.graph) {
-          this.graph.path.forEach(path => {
+          await this.graph.path.forEach(path => {
             if (!buildings.includes(path.split('_')[0])) {
               buildings.push(path.split('_')[0]);
             }
           });
         }
         this.buildings = buildings;
-        for (let building of buildings) {
-          let tmpArray = [];
+        console.log(this.buildings);
+        for (const building of buildings) {
+          const tmpArray = [];
           // console.log(building);
-          this.graph.path.forEach(element => {
+          // tslint:disable-next-line:no-shadowed-variable
+          this.graph.path.forEach((element: any) => {
             Object.keys(this.allLocations).map(
               elem => {
                 let obj = {};
                 if (element === this.allLocations[elem].id) {
                   obj = {
                     id: this.allLocations[elem].id,
-                    x: this.allLocations[elem].x,
-                    y: this.allLocations[elem].y,
+                    x: this.allLocations[elem].x_point,
+                    y: this.allLocations[elem].y_point,
                     name: this.allLocations[elem].name
                   };
                   if (obj['id'].includes(building)) {
@@ -145,15 +190,16 @@ export class MapPage implements OnInit, OnDestroy {
 
   findCost(start: string, goal: string) {
     const nodeDijkstra = require('node-dijkstra');
-    this.psuHospitalService.loadLocation().subscribe(
+    this.psuHospitalService.getAllLocations().subscribe(
       data => {
-        data.locations.forEach(element => {
+        // tslint:disable-next-line:no-shadowed-variable
+        data.forEach((element) => {
           if (element.id === this.idGoal) {
             this.nameGoal = element.name;
           }
         });
         this.graphCost = {};
-        this.allLocations = data.locations;
+        this.allLocations = data;
         const results = {};
         Object.keys(this.allLocations).map(
           elem => {
@@ -168,63 +214,51 @@ export class MapPage implements OnInit, OnDestroy {
       }
     );
   }
+
   addCostAllPath(data: any) {
     // console.log(data);
     this.costAllPath.push(data);
   }
+
   showCostAllPath() {
     console.log(this.costAllPath);
   }
 
-  ngOnInit() {
-    this.textOrder = ['เริ่มต้น'];
-    this.index = 0;
-    this.pathResults = [];
-    this.findPath();
-    // tslint:disable-next-line: no-shadowed-variable
-    this.imgPath.forEach(element => {
-      this.getBase64ImageFromURL(element).subscribe(data => {
-        this.imgCanvas.push('data:image/jpg;base64,' + data);
-      });
-    });
-  }
-
-  ngOnDestroy() {
-    this.bsub.unsubscribe();
-  }
-
-  getBase64ImageFromURL(url: string) {
+  getBase64ImageFromURL(data: Imgs) {
     return Observable.create((observer: Observer<string>) => {
       const img = new Image();
-      img.crossOrigin = 'Anonymous';
-      img.src = url;
+      const tag = data.tag;
+      img.src = data.data;
       if (!img.complete) {
         img.onload = () => {
-          observer.next(this.getBase64Image(img));
+          observer.next(this.getBase64Image(img, tag));
           observer.complete();
         };
         img.onerror = (err) => {
           observer.error(err);
         };
       } else {
-        observer.next(this.getBase64Image(img));
+        observer.next(this.getBase64Image(img, tag));
         observer.complete();
       }
     });
   }
 
-  getBase64Image(img: HTMLImageElement) {
+  getBase64Image(img: HTMLImageElement, tag: string) {
     this.canvas.width = img.width;
     this.canvas.height = img.height;
-    for (let building of this.buildings) {
-      if (img.src.includes(building)) {
+    for (const building of this.buildings) {
+      if (tag.includes(building)) {
         this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[this.buildings.indexOf(building)]);
+      } else {
+        return 0;
       }
     }
     const dataURL = this.canvas.toDataURL('image/png');
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
   // nodePath เป็น array ของ pathResults ที่ใช้ในการสร้าง map
+  // tslint:disable-next-line:ban-types
   drawLine(ctx: any, img: HTMLImageElement, nodePath: Object[]) {
     ctx.drawImage(img, 0, 0);
     ctx.beginPath();
@@ -253,26 +287,6 @@ export class MapPage implements OnInit, OnDestroy {
     }
     ctx.stroke();
   }
-  // getCompass() {
-  //   setInterval(() => {
-  //     console.log('test');
-  //     this.deviceOrientation.getCurrentHeading().then(
-  //       (data: DeviceOrientationCompassHeading) => {
-  //         this.compass = data.magneticHeading;
-  //       },
-  //       (error: any) => console.log(error)
-  //     );
-  //   }, 1000);
-  //   if (this.compass === 0 || this.compass === 360) {
-  //     console.log('เหนือ');
-  //   } else if (this.compass === 90) {
-  //     console.log('ออก');
-  //   } else if (this.compass === 180) {
-  //     console.log('ใต้');
-  //   } else if (this.compass === 270) {
-  //     console.log('ตก');
-  //   }
-  // }
 
   textToSpeech() {
     this.tts.speak({
@@ -380,6 +394,7 @@ export class MapPage implements OnInit, OnDestroy {
     this.arOrder = command.split(',');
     this.arOrder.unshift('S-' + firstnode);
     this.arOrder.push('E-' + lastnode);
+    // tslint:disable-next-line:no-shadowed-variable
     this.arOrder.forEach(element => {
       if (element) {
         element += ',';
@@ -465,4 +480,25 @@ export class MapPage implements OnInit, OnDestroy {
     this.router.navigateByUrl('/app/tabs/feeds');
     // this.showCostAllPath();
   }
+
+   // getCompass() {
+  //   setInterval(() => {
+  //     console.log('test');
+  //     this.deviceOrientation.getCurrentHeading().then(
+  //       (data: DeviceOrientationCompassHeading) => {
+  //         this.compass = data.magneticHeading;
+  //       },
+  //       (error: any) => console.log(error)
+  //     );
+  //   }, 1000);
+  //   if (this.compass === 0 || this.compass === 360) {
+  //     console.log('เหนือ');
+  //   } else if (this.compass === 90) {
+  //     console.log('ออก');
+  //   } else if (this.compass === 180) {
+  //     console.log('ใต้');
+  //   } else if (this.compass === 270) {
+  //     console.log('ตก');
+  //   }
+  // }
 }
