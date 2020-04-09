@@ -247,13 +247,14 @@ export class MapPage implements OnInit, OnDestroy {
   getBase64Image(img: HTMLImageElement, tag: string) {
     this.canvas.width = img.width;
     this.canvas.height = img.height;
-    for (const building of this.buildings) {
+    this.buildings.forEach(building => {
+      console.log(building);
       if (tag.includes(building)) {
         this.drawLine(this.canvas.getContext('2d'), img, this.pathResults[this.buildings.indexOf(building)]);
       } else {
         return 0;
       }
-    }
+    });
     const dataURL = this.canvas.toDataURL('image/png');
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
   }
