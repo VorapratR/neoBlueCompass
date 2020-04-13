@@ -29,22 +29,28 @@
       ตำแหน่งปัจจุบันของฉัน
     </h4>
   </ion-item>
-  <ion-card color="indigo" *ngIf="statusFindMyLocation">
-    <ion-card-title text-center style="margin-left: 3%;margin-top: -3%;">
-      <h4 style="color:rgb(255, 255, 255);">
-        <b>รูปแบบการระบุตำแหน่ง</b>
-      </h4>
-    </ion-card-title>
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col>
+        <ion-button text-center  (click)="qrCodeScaner()">
+          <ion-icon name="camera"></ion-icon>QR Code
+        </ion-button>    
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- <ion-card color="indigo" *ngIf="statusFindMyLocation">
+    <div>
+
+    </div>
     <ion-card-header>
       <div text-center style="margin-right: auto;margin-left: auto;margin-top: -7%;">
-        <ion-button (click)="onQrCode()">
-          <ion-icon name="camera"></ion-icon>QR Code
-        </ion-button>
         <ion-button (click)="onBeacon()">
           <ion-icon name="bluetooth"></ion-icon>Beacon
         </ion-button>
       </div>
-    </ion-card-header>
+    </ion-card-header>  
     <ion-card-content style="margin-right: auto;margin-left: auto;margin-top: -7%;" *ngIf="showDetail">
       {{findLocationDetail}}
     </ion-card-content>
@@ -52,7 +58,7 @@
       <ion-button *ngIf="typeScan" shape="round" fill="outline" color="light" (click)="qrCodeScaner()">ฉันพร้อมจะระบุตำแหน่งแล้ว</ion-button>
       <ion-button *ngIf="!typeScan"shape="round" fill="outline" color="light" (click)="beaconScaner()">ฉันพร้อมจะระบุตำแหน่งแล้ว</ion-button>
     </div>
-  </ion-card>
+  </ion-card> -->
   <ion-card *ngIf="!statusFindMyLocation">
     <ion-item shape="round" color="indigo">
       <ion-avatar slot="start">

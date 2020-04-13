@@ -39,7 +39,7 @@ export class PlanPage implements OnInit {
   onQrCode() {
     this.showDetail = true;
     this.typeScan = true;
-    this.findLocationDetail = 'เป็นการระบุตำแหน่งโดยการสแกน Qr Code บริเวณที่คุณอยู่';
+    // this.findLocationDetail = 'เป็นการระบุตำแหน่งโดยการสแกน Qr Code บริเวณที่คุณอยู่';
   }
 
   onBeacon() {
